@@ -21,6 +21,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Current = "Dashboard";
             return View();
         }
 

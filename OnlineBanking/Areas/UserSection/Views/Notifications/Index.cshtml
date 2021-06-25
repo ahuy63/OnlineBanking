@@ -1,0 +1,130 @@
+﻿@model IEnumerable<OnlineBanking.Models.Notification>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Secondary menu
+  ============================================= -->
+<div class="bg-primary">
+    <div class="container d-flex justify-content-center">
+        <ul class="nav secondary-nav">
+            <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Users" asp-action="Index">Account</a></li>
+            <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Accounts" asp-action="Index">Cards & Bank Accounts</a></li>
+            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Notifications" asp-action="Index">Notifications</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Secondary menu end -->
+<!-- Content
+============================================= -->
+<div id="content" class="py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Left Panel
+            ============================================= -->
+            <aside class="col-lg-3">
+
+                <!-- Profile Details
+                =============================== -->
+                <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
+                    <div class="profile-thumb mt-3 mb-4">
+                        <img class="rounded-circle" src="../images/profile-thumb.jpg" alt="">
+                        <div class="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture">
+                            <i class="fas fa-camera position-absolute"></i>
+                            <input type="file" class="custom-file-input" id="customFile">
+                        </div>
+                    </div>
+                    <p class="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
+                    <p class="mb-2"><a href="profile.html" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
+                </div>
+                <!-- Profile Details End -->
+                <!-- Available Balance
+                =============================== -->
+                <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
+                    <div class="text-17 text-light my-3"><i class="fas fa-wallet"></i></div>
+                    <h3 class="text-9 font-weight-400">$2956.00</h3>
+                    <p class="mb-2 text-muted opacity-8">Available Balance</p>
+                    <hr class="mx-n3">
+                    <div class="d-flex"><a href="withdraw-money.html" class="btn-link mr-auto">Withdraw</a> <a href="deposit-money.html" class="btn-link ml-auto">Deposit</a></div>
+                </div>
+                <!-- Available Balance End -->
+                <!-- Need Help?
+                =============================== -->
+                <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
+                    <div class="text-17 text-light my-3"><i class="fas fa-comments"></i></div>
+                    <h3 class="text-3 font-weight-400 my-4">Need Help?</h3>
+                    <p class="text-muted opacity-8 mb-4">
+                        Have questions or concerns regrading your account?<br>
+                        Our experts are here to help!.
+                    </p>
+                    <a href="#" class="btn btn-primary btn-block">Chate with Us</a>
+                </div>
+                <!-- Need Help? End -->
+
+            </aside>
+            <!-- Left Panel End -->
+            <!-- Middle Panel
+            ============================================= -->
+            <div class="col-lg-9">
+
+                <!-- Notifications
+                ============================================= -->
+                <div class="bg-light shadow-sm rounded p-4 mb-4">
+                    <h3 class="text-5 font-weight-400">Notifications</h3>
+                    <p class="text-muted">Select subscriptions to be delivered to <span class="text-body">smithrhodes1982@gmail.com</span></p>
+                    <hr class="mx-n4">
+                    <form id="notifications" method="post">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="announcements" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="announcements">Announcements</label>
+                            <p class="text-muted line-height-3 mt-2">Be the first to know about new features and other news.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="sendPayment" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="sendPayment">Send payment</label>
+                            <p class="text-muted line-height-3 mt-2">Send an email when I send a payment.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="receiveApayment" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="receiveApayment">Receive a payment</label>
+                            <p class="text-muted line-height-3 mt-2">Send me an email when I receive a payment.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="requestPayment" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="requestPayment">Request payment</label>
+                            <p class="text-muted line-height-3 mt-2">Send me an email when i request payment.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="problemWithPayment" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="problemWithPayment">Have a problem with a payment</label>
+                            <p class="text-muted line-height-3 mt-2">Send me an email when have a problem with a payment.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="specialOffers" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="specialOffers">Special Offers</label>
+                            <p class="text-muted line-height-3 mt-2">Receive last-minute offers from us.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <div class="form-check custom-control custom-checkbox">
+                            <input id="reviewSurveys" name="notifications" class="custom-control-input" type="checkbox">
+                            <label class="custom-control-label text-3" for="reviewSurveys">Review Surveys</label>
+                            <p class="text-muted line-height-3 mt-2">Share your payment experience to better inform users.</p>
+                        </div>
+                        <hr class="mx-n4">
+                        <button class="btn btn-primary mt-1" type="submit">Save Changes</button>
+                    </form>
+                </div>
+                <!-- Notifications End -->
+
+            </div>
+            <!-- Middle Panel End -->
+        </div>
+    </div>
+</div>
+<!-- Content end -->

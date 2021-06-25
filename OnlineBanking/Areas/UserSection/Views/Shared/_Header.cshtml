@@ -17,10 +17,10 @@
                 <nav class="primary-menu navbar navbar-expand-lg">
                     <div id="header-nav" class="collapse navbar-collapse">
                         <ul class="navbar-nav mr-auto">
-                            <li class="active"><a href="dashboard.html">Dashboard</a></li>
-                            <li><a href="transactions.html">Transactions</a></li>
-                            <li><a href="send-money.html">Send/Request</a></li>
-                            <li><a href="help.html">Help</a></li>
+                            <li class="@(ViewBag.Title == "Dashboard" ? "active" : "")"><a asp-area="UserSection" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                            <li class="@(ViewBag.Title == "Transaction" ? "active" : "")"><a asp-area="UserSection" asp-controller="Transactions" asp-action="Index">Transactions</a></li>
+                            <li class="@(ViewBag.Title == "Send/Request" ? "active" : "")"><a asp-area="UserSection" asp-controller="Transasctions" asp-action="Send">Send/Request</a></li>
+                            <li class="@(ViewBag.Title == "Help" ? "active" : "")"><a asp-area="UserSection" asp-controller="Home" asp-action="Index">Help</a></li>
                         </ul>
                     </div>
                 </nav>
