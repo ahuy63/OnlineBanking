@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, shrink-to-fit=no">
-    <link href="images/favicon.png" rel="icon" />
+    <link href="../images/favicon.png" rel="icon" />
     <title>Payyed - Money Transfer and Online Payments HTML Template</title>
     <meta name="description" content="This professional design html template is for build a Money Transfer and online payments website.">
     <meta name="author" content="harnishdesign.net">
@@ -17,6 +17,7 @@
     ============================================= -->
     <link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../vendor/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="../vendor/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
 </head>
 <body>
@@ -51,6 +52,34 @@
     <!-- Script -->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../vendor/daterangepicker/moment.min.js"></script>
+    <script src="../vendor/daterangepicker/daterangepicker.js"></script>
+    <script>
+        $(function () {
+            'use strict';
+            // Date Range Picker
+            $(function () {
+                var start = moment().subtract(29, 'days');
+                var end = moment();
+                function cb(start, end) {
+                    $('#dateRange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+                $('#dateRange').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+                cb(start, end);
+            });
+        });
+    </script>
     <script src="../js/theme.js"></script>
 </body>
 </html>
