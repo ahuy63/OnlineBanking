@@ -11,37 +11,31 @@ using OnlineBanking.Models;
 namespace OnlineBanking.Areas.UserSection.Controllers
 {
     [Area("UserSection")]
-    public class TransactionsController : Controller
+    public class SendController : Controller
     {
         private readonly OnlineBankingContext _context;
 
-        public TransactionsController(OnlineBankingContext context)
+        public SendController(OnlineBankingContext context)
         {
             _context = context;
         }
 
-        // GET: UserSection/Transactions
-        public async Task<IActionResult> Index()
+        // GET: UserSection/Send
+        public ActionResult Index()
         {
-            var onlineBankingContext = _context.Transaction.Include(t => t.FromAccount).Include(t => t.ToAccount);
-            return View(await onlineBankingContext.ToListAsync());
+            return View();
         }
-
-        public IActionResult Send()
+        public ActionResult SendConfirm()
         {
-            // truyên addressbook vao view
-            ViewData["FromAccountId"] = new SelectList(_context.Accounts, "Id", "Number");
-            ViewData["ToAccountId"] = new SelectList(_context.Accounts, "Id", "Number");
             return View();
         }
 
-        public IActionResult Request()
+        public ActionResult SendSuccess()
         {
-            //Truyen vao list account của user
             return View();
         }
 
-        // GET: UserSection/Transactions/Details/5
+        // GET: UserSection/Send/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,7 +55,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View(transaction);
         }
 
-        // GET: UserSection/Transactions/Create
+        // GET: UserSection/Send/Create
         public IActionResult Create()
         {
             ViewData["FromAccountId"] = new SelectList(_context.Accounts, "Id", "Number");
@@ -69,7 +63,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View();
         }
 
-        // POST: UserSection/Transactions/Create
+        // POST: UserSection/Send/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -87,7 +81,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View(transaction);
         }
 
-        // GET: UserSection/Transactions/Edit/5
+        // GET: UserSection/Send/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,7 +99,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View(transaction);
         }
 
-        // POST: UserSection/Transactions/Edit/5
+        // POST: UserSection/Send/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -142,7 +136,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View(transaction);
         }
 
-        // GET: UserSection/Transactions/Delete/5
+        // GET: UserSection/Send/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -162,7 +156,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View(transaction);
         }
 
-        // POST: UserSection/Transactions/Delete/5
+        // POST: UserSection/Send/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
