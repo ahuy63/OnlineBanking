@@ -1,4 +1,6 @@
-﻿<!-- Header
+﻿@using Microsoft.AspNetCore.Http
+
+<!-- Header
 ============================================= -->
 <header id="header" class="bg-transparent header-text-light">
     <div class="container">
@@ -31,10 +33,20 @@
                 <!-- Login & Signup Link
                 ============================== -->
                 <nav class="login-signup navbar navbar-expand">
-                    <ul class="navbar-nav">
-                        <li><a asp-controller="Users" asp-action="Login">Login</a> </li>
-                        <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-primary d-none d-sm-block" asp-controller="Users" asp-action="SignUp">Sign Up</a></li>
-                    </ul>
+                    <!--Xét xem người dùng đã đăng nhập chưa, nếu chưa thì sẽ hiển thị nút login và SignOut, nếu rồi sẽ là tên   -->
+                    @if(Context.Session.GetString("IdCurrentUser") == null) { //Nếu chưa
+                        <ul class="navbar-nav">
+                            <li><a asp-controller="Users" asp-action="Login">Login</a> </li>
+                            <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-primary d-none d-sm-block" asp-controller="Users" asp-action="SignUp">Sign Up</a></li>
+                        </ul>
+                    }
+                    else{ //Nếu đã đăng nhập
+                        //Lấy ra tên người dùng
+                        <ul class="navbar-nav">
+                            <li><h3 class="bg-light-1">Hello @Context.Session.GetString("NameCurrentUser")</h3> </li>
+                            <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-primary d-none d-sm-block" asp-controller="Users" asp-action="SignOut">Sign Out</a></li>
+                        </ul>
+                    }
                 </nav>
                 <!-- Login & Signup Link end -->
             </div>

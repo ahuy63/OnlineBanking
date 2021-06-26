@@ -26,6 +26,7 @@ namespace OnlineBanking.Models
         public string Number { get; set; }
         public int Balance { get; set; }
         public DateTime CreateDate { get; set; }
+
         public bool Status { get; set; }
 
 

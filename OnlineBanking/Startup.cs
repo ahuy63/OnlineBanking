@@ -29,6 +29,15 @@ namespace OnlineBanking
 
             //Bổ sung cho code frist
             services.AddDbContext<OnlineBankingContext>(options => options.UseSqlServer(Configuration.GetConnectionString("OnlineBanking")));
+
+            //Bổ sung để dùng session
+            services.AddDistributedMemoryCache();
+            services.AddSession(option =>
+            {
+                option.IdleTimeout = TimeSpan.FromMinutes(60);
+                option.Cookie.HttpOnly = true;
+                option.Cookie.IsEssential = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +59,9 @@ namespace OnlineBanking
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //Bổ sung để dùng Session
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
