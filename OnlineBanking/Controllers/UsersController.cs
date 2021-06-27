@@ -47,7 +47,8 @@ namespace OnlineBanking.Controllers
 
                 //Lưu lại tên người dùng để đưa ra Layout View
                 HttpContext.Session.SetString("NameCurrentUser", _context.Users.Where(us => us.Username == username).FirstOrDefault().FullName);
-                return RedirectToAction("","Home");
+                return RedirectToAction("Index", "Home", new {area = "UserSection"});
+
             }
 
 
@@ -82,6 +83,7 @@ namespace OnlineBanking.Controllers
 
 
         //Xử lý gửi email xác nhận
+        [Route("/Signup/Validate")]
         [HttpPost]
         public IActionResult Validate(string Username, string Password, string NumberPhone, string EmailAddress, string Address, string IdentityCard, string FullName)
         {
@@ -123,12 +125,13 @@ namespace OnlineBanking.Controllers
             return View("ValidateSignUp");
         }
 
+        [Route("/Signup")]
         [HttpPost]
         public IActionResult SignUp(int Code)
         {
             if(Code == NumberCode)
             {
-                ViewBag.MessLogin = "!You have Signed up was success, please login to continue";
+                ViewBag.ErrorMessLogin = "Congratulations, Your account has been successfully created.";
                 //Xử lý thêm user vào Db
                 UserIsLogining.DateCreate = DateTime.Now;
 
@@ -136,7 +139,7 @@ namespace OnlineBanking.Controllers
                 _context.SaveChanges();
                 return View("Login");
             }
-            ViewBag.MessSignUp = "Wrong Code, please try another Code or Email";
+            ViewBag.MessSignUp = "Wrong Code, please try again!!!";
             return View("SignUp");
         }
         
@@ -144,7 +147,7 @@ namespace OnlineBanking.Controllers
         {
             HttpContext.Session.Remove("NameCurrentUser");
             HttpContext.Session.Remove("IdCurrentUser");
-            return View("Login");
+            return RedirectToAction("Index", "Home");
         }
 
        

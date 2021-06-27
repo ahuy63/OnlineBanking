@@ -66,14 +66,14 @@
                         <div class="row">
                             <div class="col-11 col-lg-9 col-xl-8 mx-auto">
                                 <h3 class="font-weight-400 mb-4">We have send a Code to your Email, please input the code</h3>
-                                <form asp-action="SignUp" asp-controller="Users" method="post">
+                                <form  asp-controller="Users" asp-action="SignUp" method="post">
                                     <div class="form-group">
                                         <label>Code</label>
                                         <input type="text" class="form-control" required placeholder="Enter The Code" name="Code">
                                     </div>
                                     <button class="btn btn-primary btn-block my-4" type="submit">Confirm</button>
                                 </form>
-                                <p class="text-3 text-center text-muted">Already have an account? <a class="btn-link" asp-controller="Users" asp-action="Validate">Log In</a></p>
+                                <p class="text-3 text-center text-muted">Already have an account? <a class="btn-link" asp-controller="Users" asp-action="Login">Log In</a></p>
                             </div>
                         </div>
                     </div>
