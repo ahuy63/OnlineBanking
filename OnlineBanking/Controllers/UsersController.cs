@@ -32,6 +32,7 @@ namespace OnlineBanking.Controllers
             return View();
         }
 
+        [Route("/Login")]
         //Xử lý đăng nhập
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -46,7 +47,7 @@ namespace OnlineBanking.Controllers
 
                 //Lưu lại tên người dùng để đưa ra Layout View
                 HttpContext.Session.SetString("NameCurrentUser", _context.Users.Where(us => us.Username == username).FirstOrDefault().FullName);
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("","Home");
             }
 
 
