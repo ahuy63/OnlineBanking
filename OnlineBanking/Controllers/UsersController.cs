@@ -90,7 +90,7 @@ namespace OnlineBanking.Controllers
             //Đầu tiên kiểm tra xem Username này có bị trùng ko
             if(_context.Users.Any(us => us.Username == Username))
             {
-                ViewBag.MessSignUp = "Have already this Username, please Choose another Username";
+                ViewBag.MessSignUp = "This Username is already taken, please Choose another Username";
                 return View("SignUp");
             }
 
