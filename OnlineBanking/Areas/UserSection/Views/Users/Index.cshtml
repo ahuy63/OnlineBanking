@@ -8,7 +8,7 @@
 <div class="bg-primary">
     <div class="container d-flex justify-content-center">
         <ul class="nav secondary-nav">
-            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Users" asp-action="Index">Account</a></li>
+            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Users" asp-action="Index">Info</a></li>
             <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Accounts" asp-action="Index">Cards & Bank Accounts</a></li>
             <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Notifications" asp-action="Index">Notifications</a></li>
         </ul>
@@ -29,7 +29,7 @@
                 =============================== -->
                 <div class="bg-light shadow-sm rounded text-center p-3 mb-4">
                     <div class="profile-thumb mt-3 mb-4">
-                        <img class="rounded-circle" src="../images/profile-thumb.jpg" alt="">
+                        <img class="rounded-circle" src="@Url.Content("~/images/profile-thumb.jpg")" alt="">
                         <div class="profile-thumb-edit custom-file bg-primary text-white" data-toggle="tooltip" title="Change Profile Picture">
                             <i class="fas fa-camera position-absolute"></i>
                             <input type="file" class="custom-file-input" id="customFile">

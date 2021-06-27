@@ -20,7 +20,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _context = context;
         }
 
-        // GET: UserSection/Send
+        [Route("PayyedDigibank/Send")]
         public ActionResult Index()
         {
             return View();

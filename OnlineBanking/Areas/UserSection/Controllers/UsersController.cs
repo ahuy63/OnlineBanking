@@ -20,7 +20,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _context = context;
         }
 
-        // GET: UserSection/Users
+        [Route("PayyedDigibank/User/Info")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Users.ToListAsync());

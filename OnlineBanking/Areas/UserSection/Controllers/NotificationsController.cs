@@ -20,7 +20,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _context = context;
         }
 
-        // GET: UserSection/Notifications
+        [Route("PayyedDigibank/User/Notifications")]
         public async Task<IActionResult> Index()
         {
             ViewBag.Current = "Notification";

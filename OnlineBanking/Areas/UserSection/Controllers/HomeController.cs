@@ -19,14 +19,10 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _logger = logger;
         }
 
+        [Route("PayyedDigibank/Dashboard")]
         public IActionResult Index()
         {
             ViewBag.Current = "Dashboard";
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
         }
 

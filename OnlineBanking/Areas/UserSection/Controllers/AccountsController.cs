@@ -20,7 +20,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _context = context;
         }
 
-        // GET: UserSection/Accounts
+        [Route("PayyedDigibank/User/Accounts")]
         public async Task<IActionResult> Index()
         {
             var onlineBankingContext = _context.Accounts.Include(a => a.AccountType).Include(a => a.User);
