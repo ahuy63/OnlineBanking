@@ -22,7 +22,16 @@ namespace OnlineBanking.Controllers
         {
             return View();
         }
-
+        [Route("/Send")]
+        public IActionResult Send()
+        {
+            return View();
+        }
+        [Route("/Receive")]
+        public IActionResult Receive()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

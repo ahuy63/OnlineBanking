@@ -24,7 +24,7 @@ namespace OnlineBanking.Controllers
             _context = context;
         }
 
-        
+        [Route("/Login")]
         //Hiển thi trang đăng nhập
         public IActionResult Login()
         {
@@ -55,6 +55,7 @@ namespace OnlineBanking.Controllers
             return View();
         }
 
+        [Route("/Signup")]
         // GET: Users/Create
         public IActionResult SignUp()
         {
