@@ -32,6 +32,21 @@ namespace OnlineBanking.Controllers
         {
             return View();
         }
+        [Route("/About")]
+        public IActionResult About()
+        {
+            return View();
+        }
+        [Route("/Fees")]
+        public IActionResult Fees()
+        {
+            return View();
+        }
+        [Route("/Help")]
+        public IActionResult Help()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
