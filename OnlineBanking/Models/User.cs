@@ -26,6 +26,9 @@ namespace OnlineBanking.Models
        // [Required(ErrorMessage = "{0} Full Name Cannot Be Blank")]
         public string FullName { get; set; }
 
+        public DateTime DateOfBirthday { get; set; }
+
+
         [DataType(DataType.PhoneNumber)]
         [DisplayName("Phone Number")]
         //[Required(ErrorMessage = "{0} Full Name Cannot Be Blank")]
