@@ -18,6 +18,6 @@ namespace OnlineBanking.Data
         public DbSet<AddressBook> AddressBooks { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-
+        public DbSet<Currency> Currencies { get; set; }
     }
 }
