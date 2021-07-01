@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OnlineBanking.Data;
 using OnlineBanking.Models;
@@ -17,26 +18,32 @@ namespace OnlineBanking.Areas.UserSection.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        //private readonly OnlineBankingContext _context;
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-        //public HomeController(OnlineBankingContext context)
+        private readonly OnlineBankingContext _context;
+        //public HomeController(ILogger<HomeController> logger)
         //{
-        //    _context = context;
+        //    _logger = logger;
         //}
+        public HomeController(OnlineBankingContext context)
+        {
+            _context = context;
+        }
 
         [Route("PayyedDigibank/Dashboard")]
-        public IActionResult Index()
+        //public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
             if (HttpContext.Session.GetString("NameCurrentUser") == null)
             {
                 return RedirectToAction("Login", "Users");
 
             }
+            var user = await _context.Users
+            .FirstOrDefaultAsync(m => m.Id == id);
+
             ViewBag.Current = "Dashboard";
-            return View();
+
+            return View(user);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

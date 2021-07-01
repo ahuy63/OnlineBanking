@@ -1,4 +1,5 @@
-﻿@model IEnumerable<OnlineBanking.Models.User>
+﻿@*@model IEnumerable<OnlineBanking.Models.User>*@
+@model OnlineBanking.Models.User
 
 @{
     ViewData["Title"] = "Dashboard";
@@ -23,7 +24,7 @@
                             <input type="file" class="custom-file-input" id="customFile">
                         </div>
                     </div>
-                    <p class="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
+                    <p class="text-3 font-weight-500 mb-2">Hello, @Model.FullName</p>
                     <p class="mb-2"><a href="profile.html" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
                 </div>
                 <!-- Profile Details End -->
@@ -63,26 +64,68 @@
                     <div class="row profile-completeness">
                         <div class="col-sm-6 col-md-3 mb-4 mb-md-0">
                             <div class="border rounded p-3 text-center">
-                                <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-mobile-alt"></i></span> <span class="text-5 d-block text-success mt-4 mb-3"><i class="fas fa-check-circle"></i></span>
-                                <p class="mb-0">Mobile Added</p>
+                                @{
+                                    if (Model.NumberPhone =="")
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-mobile-alt"></i></span> <span class="text-5 d-block text-light mt-4 mb-3"><i class="far fa-circle"></i></span>
+                                        <p class="mb-0"><a class="btn-link stretched-link" href="">Add Mobile</a></p>
+                                    }
+                                    else
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-mobile-alt"></i></span> <span class="text-5 d-block text-success mt-4 mb-3"><i class="fas fa-check-circle"></i></span>
+                                        <p class="mb-0">Mobile Added</p>
+                                    }
+                                }
+
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-3 mb-4 mb-md-0">
                             <div class="border rounded p-3 text-center">
-                                <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-envelope"></i></span> <span class="text-5 d-block text-success mt-4 mb-3"><i class="fas fa-check-circle"></i></span>
-                                <p class="mb-0">Email Added</p>
+                                @{
+                                    if (Model.Email == "")
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-envelope"></i></span> <span class="text-5 d-block text-light mt-4 mb-3"><i class="far fa-circle"></i></span>
+                                        <p class="mb-0"><a class="btn-link stretched-link" href="">Add Email</a></p>
+                                    }
+                                    else
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-envelope"></i></span> <span class="text-5 d-block text-success mt-4 mb-3"><i class="fas fa-check-circle"></i></span>
+                                        <p class="mb-0">Email Added</p>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-3 mb-4 mb-sm-0">
                             <div class="border rounded p-3 text-center">
-                                <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-credit-card"></i></span> <span class="text-5 d-block text-light mt-4 mb-3"><i class="far fa-circle "></i></span>
-                                <p class="mb-0"><a class="btn-link stretched-link" href="">Add Card</a></p>
+                                @{
+                                    if (true)
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-credit-card"></i></span> <span class="text-5 d-block text-light mt-4 mb-3"><i class="far fa-circle "></i></span>
+                                        <p class="mb-0"><a class="btn-link stretched-link" href="">Add Card</a></p>
+                                    }
+                                    else
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-credit-card"></i></span> <span class="text-5 d-block text-success mt-4 mb-3"><i class="fas fa-check-circle "></i></span>
+                                        <p class="mb-0">Card Added</p>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-3">
                             <div class="border rounded p-3 text-center">
-                                <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-university"></i></span> <span class="text-5 d-block text-light mt-4 mb-3"><i class="far fa-circle "></i></span>
-                                <p class="mb-0"><a class="btn-link stretched-link" href="">Add Bank Account</a></p>
+                                @{
+                                    if (true)
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-university"></i></span> <span class="text-5 d-block text-light mt-4 mb-3"><i class="far fa-circle "></i></span>
+                                        <p class="mb-0"><a class="btn-link stretched-link" href="">Add Bank Account</a></p>
+                                    }
+                                    else
+                                    {
+                                        <span class="d-block text-10 text-light mt-2 mb-3"><i class="fas fa-university"></i></span> <span class="text-5 d-block text-success mt-4 mb-3"><i class="fas fa-check-circle "></i></span>
+                                        <p class="mb-0">Bank Account Added</p>
+                                    }
+                                }
+
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-﻿
+﻿@model OnlineBanking.Models.User
 @{
     ViewData["Title"] = "Index";
 }
@@ -35,7 +35,7 @@
                             <input type="file" class="custom-file-input" id="customFile">
                         </div>
                     </div>
-                    <p class="text-3 font-weight-500 mb-2">Hello, Smith Rhodes</p>
+                    <p class="text-3 font-weight-500 mb-2">Hello, @Model.FullName</p>
                     <p class="mb-2"><a href="profile.html" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
                 </div>
                 <!-- Profile Details End -->
@@ -74,19 +74,16 @@
                     <h3 class="text-5 font-weight-400 mb-3">Personal Details <a href="#edit-personal-details" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit</a></h3>
                     <div class="row">
                         <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Name</p>
-                        <p class="col-sm-9">Smith Rhodes</p>
+                        <p class="col-sm-9">@Model.FullName</p>
                     </div>
                     <div class="row">
                         <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Date of Birth</p>
-                        <p class="col-sm-9">12-09-1982</p>
+                        <p class="col-sm-9">@Model.DateOfBirthday</p>
                     </div>
                     <div class="row">
                         <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Address</p>
                         <p class="col-sm-9">
-                            4th Floor, Plot No.22, Above Public Park, 145 Murphy Canyon Rd,  Suite 100-18,<br>
-                            San Ditego,<br>
-                            California - 22434,<br>
-                            United States.
+                            @Model.Address
                         </p>
                     </div>
                 </div>
@@ -100,25 +97,19 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="personaldetails" method="post">
+                                <form id="personaldetails" asp-controller="Users" asp-action="" method="post">
                                     <div class="row">
-                                        <div class="col-12 col-sm-6">
+                                        <div class="col-12 col-sm-12">
                                             <div class="form-group">
-                                                <label for="firstName">First Name</label>
-                                                <input type="text" value="Smith" class="form-control" data-bv-field="firstName" id="firstName" required placeholder="First Name">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6">
-                                            <div class="form-group">
-                                                <label for="fullName">Last Name</label>
-                                                <input type="text" value="Rhodes" class="form-control" data-bv-field="fullName" id="fullName" required placeholder="Full Name">
+                                                <label for="firstName">Full Name</label>
+                                                <input asp-for="FullName" class="form-control" data-bv-field="firstName" id="firstName" required placeholder="First Name">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="birthDate">Date of Birth</label>
                                                 <div class="position-relative">
-                                                    <input id="birthDate" value="12-09-1982" type="text" class="form-control" required placeholder="Date of Birth">
+                                                    <input id="birthDate" asp-for="DateOfBirthday" class="form-control" required placeholder="Date of Birth">
                                                     <span class="icon-inside"><i class="fas fa-calendar-alt"></i></span>
                                                 </div>
                                             </div>
@@ -130,86 +121,7 @@
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="address">Address</label>
-                                                <input type="text" value="4th Floor, Plot No.22, Above Public Park" class="form-control" data-bv-field="address" id="address" required placeholder="Address 1">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6">
-                                            <div class="form-group">
-                                                <label for="city">City</label>
-                                                <input id="city" value="San Ditego" type="text" class="form-control" required placeholder="City">
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6">
-                                            <div class="form-group">
-                                                <label for="input-zone">State</label>
-                                                <select class="custom-select" id="input-zone" name="zone_id">
-                                                    <option value=""> --- Please Select --- </option>
-                                                    <option value="3613">Alabama</option>
-                                                    <option value="3614">Alaska</option>
-                                                    <option value="3615">American Samoa</option>
-                                                    <option value="3616">Arizona</option>
-                                                    <option value="3617">Arkansas</option>
-                                                    <option value="3618">Armed Forces Africa</option>
-                                                    <option value="3619">Armed Forces Americas</option>
-                                                    <option value="3620">Armed Forces Canada</option>
-                                                    <option value="3621">Armed Forces Europe</option>
-                                                    <option value="3622">Armed Forces Middle East</option>
-                                                    <option value="3623">Armed Forces Pacific</option>
-                                                    <option selected="selected" value="3624">California</option>
-                                                    <option value="3625">Colorado</option>
-                                                    <option value="3626">Connecticut</option>
-                                                    <option value="3627">Delaware</option>
-                                                    <option value="3628">District of Columbia</option>
-                                                    <option value="3629">Federated States Of Micronesia</option>
-                                                    <option value="3630">Florida</option>
-                                                    <option value="3631">Georgia</option>
-                                                    <option value="3632">Guam</option>
-                                                    <option value="3633">Hawaii</option>
-                                                    <option value="3634">Idaho</option>
-                                                    <option value="3635">Illinois</option>
-                                                    <option value="3636">Indiana</option>
-                                                    <option value="3637">Iowa</option>
-                                                    <option value="3638">Kansas</option>
-                                                    <option value="3639">Kentucky</option>
-                                                    <option value="3640">Louisiana</option>
-                                                    <option value="3641">Maine</option>
-                                                    <option value="3642">Marshall Islands</option>
-                                                    <option value="3643">Maryland</option>
-                                                    <option value="3644">Massachusetts</option>
-                                                    <option value="3645">Michigan</option>
-                                                    <option value="3646">Minnesota</option>
-                                                    <option value="3647">Mississippi</option>
-                                                    <option value="3648">Missouri</option>
-                                                    <option value="3649">Montana</option>
-                                                    <option value="3650">Nebraska</option>
-                                                    <option value="3651">Nevada</option>
-                                                    <option value="3652">New Hampshire</option>
-                                                    <option value="3653">New Jersey</option>
-                                                    <option value="3654">New Mexico</option>
-                                                    <option value="3655">New York</option>
-                                                    <option value="3656">North Carolina</option>
-                                                    <option value="3657">North Dakota</option>
-                                                    <option value="3658">Northern Mariana Islands</option>
-                                                    <option value="3659">Ohio</option>
-                                                    <option value="3660">Oklahoma</option>
-                                                    <option value="3661">Oregon</option>
-                                                    <option value="3662">Palau</option>
-                                                    <option value="3663">Pennsylvania</option>
-                                                    <option value="3664">Puerto Rico</option>
-                                                    <option value="3665">Rhode Island</option>
-                                                    <option value="3666">South Carolina</option>
-                                                    <option value="3667">South Dakota</option>
-                                                    <option value="3668">Tennessee</option>
-                                                    <option value="3669">Texas</option>
-                                                    <option value="3670">Utah</option>
-                                                    <option value="3671">Vermont</option>
-                                                    <option value="3672">Virgin Islands</option>
-                                                    <option value="3673">Virginia</option>
-                                                    <option value="3674">Washington</option>
-                                                    <option value="3675">West Virginia</option>
-                                                    <option value="3676">Wisconsin</option>
-                                                    <option value="3677">Wyoming</option>
-                                                </select>
+                                                <input asp-for="Address" class="form-control" data-bv-field="address" id="address" required placeholder="Address 1">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-6">
@@ -639,7 +551,7 @@
                     <h3 class="text-5 font-weight-400 mb-3">Email Addresses <a href="#edit-email" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit</a></h3>
                     <div class="row">
                         <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Email ID <span class="text-muted font-weight-500">(Primary)</span></p>
-                        <p class="col-sm-9">smithrhodes1982@gmail.com</p>
+                        <p class="col-sm-9">@Model.Email</p>
                     </div>
                 </div>
                 <!-- Edit Details Modal
@@ -652,12 +564,12 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="emailAddresses" method="post">
+                                <form id="emailAddresses" asp-controller="Users" asp-action="" method="post">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="emailID">Email ID <span class="text-muted font-weight-500">(Primary)</span></label>
-                                                <input type="text" value="smithrhodes1982@gmail.com" class="form-control" data-bv-field="emailid" id="emailID" required placeholder="Email ID">
+                                                <input asp-for="Email" class="form-control" data-bv-field="emailid" id="emailID" required placeholder="Email ID">
                                             </div>
                                         </div>
                                     </div>
@@ -675,7 +587,7 @@
                     <h3 class="text-5 font-weight-400 mb-3">Phone <a href="#edit-phone" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit</a></h3>
                     <div class="row">
                         <p class="col-sm-3 text-muted text-sm-right mb-0 mb-sm-3">Mobile <span class="text-muted font-weight-500">(Primary)</span></p>
-                        <p class="col-sm-9">+1 202-555-0125</p>
+                        <p class="col-sm-9">@Model.NumberPhone</p>
                     </div>
                 </div>
                 <!-- Edit Details Modal
@@ -688,12 +600,12 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="phone" method="post">
+                                <form id="phone" asp-controller="Users" asp-action="" method="post">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label for="mobileNumber">Mobile <span class="text-muted font-weight-500">(Primary)</span></label>
-                                                <input type="text" value="+1 202-555-0125" class="form-control" data-bv-field="mobilenumber" id="mobileNumber" required placeholder="Mobile Number">
+                                                <input asp-for="NumberPhone" class="form-control" data-bv-field="mobilenumber" id="mobileNumber" required placeholder="Mobile Number">
                                             </div>
                                         </div>
                                     </div>
@@ -714,7 +626,7 @@
                             <label class="col-form-label">Password</label>
                         </p>
                         <p class="col-sm-9">
-                            <input type="password" class="form-control-plaintext" data-bv-field="password" id="password" value="EnterPassword">
+                            <input type="password" class="form-control-plaintext" data-bv-field="password" id="password" value="@Model.Password" readonly>
                         </p>
                     </div>
                 </div>
@@ -728,7 +640,7 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="changePassword" method="post">
+                                <form id="changePassword">
                                     <div class="form-group">
                                         <label for="existingPassword">Confirm Current Password</label>
                                         <input type="text" class="form-control" data-bv-field="existingpassword" id="existingPassword" required placeholder="Enter Current Password">
@@ -739,19 +651,38 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="confirmPassword">Confirm New Password</label>
-                                        <input type="text" class="form-control" data-bv-field="confirmgpassword" id="confirmPassword" required placeholder="Enter Confirm New Password">
+                                        <input type="text" class="form-control" data-bv-field="confirmpassword" id="confirmPassword" required placeholder="Enter Confirm New Password">
                                     </div>
-                                    <button class="btn btn-primary btn-block mt-4" type="submit">Update Password</button>
+                                    <div class="form-group">
+                                        <label id="noti" style="color:red"></label>
+                                    </div>
+                                    <a class="btn btn-primary btn-block mt-4" onclick="CheckPasswordInput()">Update Password</a>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Security End -->
-
             </div>
             <!-- Middle Panel End -->
         </div>
     </div>
 </div>
 <!-- Content end --> 
+<script type="text/javascript">
+    function CheckPasswordInput() {
+        var existingpass = document.getElementById("existingPassword").value;
+        var newpass = document.getElementById("newPassword").value;
+        var confirmpass = document.getElementById("confirmPassword").value;
+        if (existingpass != @Model.Password) {
+            document.getElementById("noti").innerHTML = "Wrong current Password";
+        }
+        else if (newpass == existingpass) {
+            document.getElementById("noti").innerHTML = "New password must be different from current password";
+        } else if (newpass != confirmpass) {
+            document.getElementById("noti").innerHTML = "New password and confirm password does not match";
+        } else {
+            alert("thanh cong");
+        }
+    }
+</script>
