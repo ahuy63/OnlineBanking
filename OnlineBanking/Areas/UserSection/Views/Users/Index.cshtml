@@ -97,7 +97,7 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="personaldetails" asp-controller="Users" asp-action="" method="post">
+                                <form id="personaldetails" asp-controller="Users" asp-action="ChangePersonal" method="post">
                                     <div class="row">
                                         <div class="col-12 col-sm-12">
                                             <div class="form-group">
@@ -600,7 +600,7 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="phone" asp-controller="Users" asp-action="" method="post">
+                                <form id="phone" asp-controller="Users" asp-action="ChangePhone" method="post">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
@@ -640,14 +640,14 @@
                                 <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
                             </div>
                             <div class="modal-body p-4">
-                                <form id="changePassword">
+                                <form id="changePassword" asp-controller="Users" asp-action="ChangePassword" method="post">
                                     <div class="form-group">
                                         <label for="existingPassword">Confirm Current Password</label>
                                         <input type="text" class="form-control" data-bv-field="existingpassword" id="existingPassword" required placeholder="Enter Current Password">
                                     </div>
                                     <div class="form-group">
                                         <label for="newPassword">New Password</label>
-                                        <input type="text" class="form-control" data-bv-field="newpassword" id="newPassword" required placeholder="Enter New Password">
+                                        <input type="text" name="newpass" class="form-control" data-bv-field="newpassword" id="newPassword" required placeholder="Enter New Password">
                                     </div>
                                     <div class="form-group">
                                         <label for="confirmPassword">Confirm New Password</label>
@@ -656,7 +656,7 @@
                                     <div class="form-group">
                                         <label id="noti" style="color:red"></label>
                                     </div>
-                                    <a class="btn btn-primary btn-block mt-4" onclick="CheckPasswordInput()">Update Password</a>
+                                    <button class="btn btn-primary btn-block mt-4" onclick="return CheckPasswordInput()">Update Password</button>
                                 </form>
                             </div>
                         </div>
@@ -676,13 +676,25 @@
         var confirmpass = document.getElementById("confirmPassword").value;
         if (existingpass != @Model.Password) {
             document.getElementById("noti").innerHTML = "Wrong current Password";
+            document.getElementById('changePassword').onsubmit = function () {
+                return false;
+            }
         }
         else if (newpass == existingpass) {
             document.getElementById("noti").innerHTML = "New password must be different from current password";
+            document.getElementById('changePassword').onsubmit = function () {
+                return false;
         } else if (newpass != confirmpass) {
             document.getElementById("noti").innerHTML = "New password and confirm password does not match";
-        } else {
+            document.getElementById('changePassword').onsubmit = function () {
+                return false;
+        } @*else {
+            alert(newpass);
+            window.location.href = '@Url.Action("ChangePassword", "Users", new {newpass = "newpass"})'.replace("newpass",newpass);
             alert("thanh cong");
-        }
+        }*@
+        else
+            document.getElementById('changePassword').onsubmit = function () {
+                return true;
     }
 </script>

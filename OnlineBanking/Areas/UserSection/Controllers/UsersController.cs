@@ -20,7 +20,6 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         {
             _context = context;
         }
-
         [Route("PayyedDigibank/User/Info")]
         public async Task<IActionResult> Index()
         {
@@ -28,6 +27,47 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             var user = await _context.Users
             .FirstOrDefaultAsync(m => m.Id == id);
             return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(string newpass)
+        {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            var user = new User() { Id = id, Password = newpass };
+            _context.Users.Attach(user);
+            _context.Entry(user).Property(x => x.Password).IsModified = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePhone(string NumberPhone)
+        {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            var user = new User() { Id = id, NumberPhone = NumberPhone };
+            _context.Users.Attach(user);
+            _context.Entry(user).Property(x => x.NumberPhone).IsModified = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePersonal(string FullName, DateTime DateOfBirthday, string Address)
+        {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+
+            var user = new User() { Id = id, FullName = FullName, DateOfBirthday = DateOfBirthday, Address = Address};
+            _context.Users.Attach(user);
+            //_context.Entry(user).State=EntityState.Modified;
+            _context.Update(user).Property(x => x.FullName).IsModified = true;
+            _context.Update(user).Property(x => x.DateOfBirthday).IsModified = true;
+            _context.Update(user).Property(x => x.Address).IsModified = true;
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: UserSection/Users/Details/5
