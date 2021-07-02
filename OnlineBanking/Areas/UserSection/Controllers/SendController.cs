@@ -39,6 +39,8 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             //Lấy danh sách người nhận đem qua bên view
             ViewBag.AllAddressBookById = _context.AddressBooks.Include(ad => ad.Account).Include(ad => ad.Account.User).Include(ad => ad.User).Where(ad => ad.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
 
+            //Lấy 1 người nhận default
+
             //Lấy danh sách tài khoản đem qua bên view
             ViewBag.AccountList = _context.Accounts.Include(acc => acc.User).Include(acc =>acc.AccountType).Where(acc => acc.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
 
