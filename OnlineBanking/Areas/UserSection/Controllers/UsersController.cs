@@ -55,17 +55,29 @@ namespace OnlineBanking.Areas.UserSection.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail(string Email)
+        {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            var user = new User() { Id = id, Email = Email };
+            _context.Users.Attach(user);
+            _context.Entry(user).Property(x => x.Email).IsModified = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePersonal(string FullName, DateTime DateOfBirthday, string Address)
         {
             int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
 
             var user = new User() { Id = id, FullName = FullName, DateOfBirthday = DateOfBirthday, Address = Address};
             _context.Users.Attach(user);
-            //_context.Entry(user).State=EntityState.Modified;
-            _context.Update(user).Property(x => x.FullName).IsModified = true;
-            _context.Update(user).Property(x => x.DateOfBirthday).IsModified = true;
-            _context.Update(user).Property(x => x.Address).IsModified = true;
-            
+            //_context.Entry(user).State = EntityState.Modified;
+            _context.Entry(user).Property(x => x.FullName).IsModified = true;
+            _context.Entry(user).Property(x => x.DateOfBirthday).IsModified = true;
+            _context.Entry(user).Property(x => x.Address).IsModified = true;
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
