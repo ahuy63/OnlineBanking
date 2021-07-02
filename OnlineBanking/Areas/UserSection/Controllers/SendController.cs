@@ -78,7 +78,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             transaction.CurrencyId = _context.Currencies.Where(cu => cu.Name == Currency).FirstOrDefault().Id;
             transaction.IssuedDate = DateTime.Now;
             transaction.Status = true;
-            //Vấn đề phát sinh ở đây này, vì New balance đang tính theo USD nên phải đổi lại, mà đmẹ tại sao có cái newbalacne ở đây ????
+            //Vấn đề phát sinh ở đây này, vì New balance đang tính theo USD nên phải đổi lại, mà tại sao có cái newbalacne ở đây ????
             //À cái newBalance để dùng trong notification
             //Để dễ thì tính tỷ giá trước
             double tempAmount = Amount * _context.Currencies.Where(cu => cu.Name == Currency).FirstOrDefault().ExchangeRate;

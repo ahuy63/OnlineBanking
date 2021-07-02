@@ -26,7 +26,7 @@ namespace OnlineBanking.Models
        // [Required(ErrorMessage = "{0} Full Name Cannot Be Blank")]
         public string FullName { get; set; }
 
-        public DateTime DateOfBirthday { get; set; }
+        public DateTime? DateOfBirthday { get; set; }
 
 
         [DataType(DataType.PhoneNumber)]
@@ -37,17 +37,18 @@ namespace OnlineBanking.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "{0} Address Cannot Be Blank")]
+        //[Required(ErrorMessage = "{0} Address Cannot Be Blank")]
         public string Address { get; set; }
 
-        public DateTime DateCreate { get; set; }
+        [DisplayName("Date Created")]
+        public DateTime? DateCreate { get; set; }
 
         [DisplayName("Identity Card")]
        // [Required(ErrorMessage = "{0} Identity Card Cannot Be Blank")]
         public string IdentityCard { get; set; }
 
-        public bool IsAdmin { get; set; }
-        public bool Status { get; set; }
+        public bool? IsAdmin { get; set; }
+        public bool? Status { get; set; }
 
         //Thêm các List cho dễ truy vấn
         public List<AddressBook> AddressBooks { get; set; }
