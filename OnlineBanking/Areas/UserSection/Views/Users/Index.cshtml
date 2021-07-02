@@ -684,17 +684,16 @@
             document.getElementById("noti").innerHTML = "New password must be different from current password";
             document.getElementById('changePassword').onsubmit = function () {
                 return false;
-        } else if (newpass != confirmpass) {
+            }
+        }
+        else if (newpass != confirmpass) {
             document.getElementById("noti").innerHTML = "New password and confirm password does not match";
             document.getElementById('changePassword').onsubmit = function () {
                 return false;
-        } @*else {
-            alert(newpass);
-            window.location.href = '@Url.Action("ChangePassword", "Users", new {newpass = "newpass"})'.replace("newpass",newpass);
-            alert("thanh cong");
-        }*@
-        else
-            document.getElementById('changePassword').onsubmit = function () {
-                return true;
+            }
+        }
+        else document.getElementById('changePassword').onsubmit = function () {
+            return true;
+        }
     }
 </script>
