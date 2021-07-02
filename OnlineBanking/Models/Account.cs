@@ -24,7 +24,7 @@ namespace OnlineBanking.Models
         [DisplayName("Account Number")]
         [Required(ErrorMessage = ("{0} Account Number Cannot Be Blank"))]
         public string Number { get; set; }
-        public int Balance { get; set; }
+        public double Balance { get; set; }
         public DateTime CreateDate { get; set; }
 
         public bool Status { get; set; }

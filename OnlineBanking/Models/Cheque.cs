@@ -16,7 +16,9 @@ namespace OnlineBanking.Models
 
         [Required(ErrorMessage = "{0} Address Cannot Be Blank")]
         public string Address { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
+        public int CurrencyId { get; set; }
+        public Currency currency { get; set; }
         public bool Status { get; set; }
     }
 }

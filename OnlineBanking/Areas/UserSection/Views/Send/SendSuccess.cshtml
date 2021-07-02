@@ -30,7 +30,8 @@
                         <p class="text-center text-success text-8 line-height-07">Success!</p>
                         <p class="text-center text-4">Transactions Complete</p>
                     </div>
-                    <p class="text-center text-3 mb-4">You've Succesfully sent <span class="text-4 font-weight-500">$1000</span> to <span class="font-weight-500">demo@gmail.com</span>, See transaction details under <a href="#">Activity</a>.</p>
+                    <!--Thêm số tiền vào đây-->
+                    <p class="text-center text-3 mb-4">You've Succesfully sent <span class="text-4 font-weight-500">@ViewBag.Amount @ViewBag.Currency</span> to <span class="font-weight-500">@ViewBag.RecipientNumber - @ViewBag.RecipientName</span>, See transaction details under <a href="#">Activity</a>.</p>
                     <button class="btn btn-primary btn-block">Send Money Again</button>
                     <button class="btn btn-link btn-block"><i class="fas fa-print"></i> Print</button>
                 </div>

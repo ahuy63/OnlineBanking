@@ -4,6 +4,8 @@
     ViewData["Title"] = "Send/Request";
     //Layout = "_SubUserLayout";
 }
+
+
 <!-- Secondary menu
   ============================================= -->
 <div class="bg-primary">
@@ -20,7 +22,10 @@
 <div id="content" class="py-4">
     <div class="container">
         <h2 class="font-weight-400 text-center mt-3">Send Money</h2>
-        <p class="text-4 text-center mb-4">You are sending money to <span class="font-weight-500">demo@gmail.com</span></p>
+
+        <!--Lấy người nhận ở đây-->
+        <p class="text-4 text-center mb-4">You are sending money to <span class="font-weight-500">@ViewBag.Recipient.Number - @ViewBag.Recipient.User.FullName</span></p>
+        
         <div class="row">
             <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
                 <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
@@ -30,15 +35,28 @@
                     <form id="form-send-money" asp-area="UserSection" asp-controller="Send" asp-action="SendSuccess" method="post">
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" rows="4" id="description" required placeholder="Payment Description"></textarea>
+                            <textarea name="Description" class="form-control" rows="4" id="description" required placeholder="Payment Description"></textarea>
                         </div>
                         <h3 class="text-5 font-weight-400 mb-3">Details</h3>
-                        <p class="mb-1">Send Amount <span class="text-3 float-right">1,000.00 USD</span></p>
-                        <p class="mb-1">Total fees <span class="text-3 float-right">7.21 USD</span></p>
+                        <pca></pca>
+
+                        <!--Thêm người gửi ở đây-->
+                        <p class="mb-1">You Are Sending From<span class="text-3 float-right">@ViewBag.AccountFrom</span></p>
+                        <!--Thêm số tiền ở đây-->
+                        <p class="mb-1">Send Amount <span class="text-3 float-right">@ViewBag.Amount @ViewBag.Currency</span></p>
                         <hr>
-                        <p class="font-weight-500">Total<span class="text-3 float-right">1,007.21 USD</span></p>
-                        <button class="btn btn-primary btn-block">Send Money</button>
+                        <!--Thêm số tiền ở đây-->
+                        <p class="font-weight-500">Total<span class="text-3 float-right">@ViewBag.Amount @ViewBag.Currency</span></p>
+
+                        <!--Thêm input để đẩy lên DB-->
+                        <input type="hidden" name="AccountFrom" value="@ViewBag.AccountFrom" />
+                        <input type="hidden" name="AccountTo" value="@ViewBag.Recipient.Number" />
+                        <input type="hidden" name="Amount" value="@ViewBag.Amount" />
+                        <input type="hidden" name="Currency" value="@ViewBag.Currency" />
+                        <!--Thêm hết vào đm-->
+                        <button class="btn btn-primary btn-block" type="submit">Send Money</button>
                     </form>
+
                     <!-- Send Money Confirm end -->
                 </div>
             </div>

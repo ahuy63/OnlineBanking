@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,18 +21,90 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _context = context;
         }
 
+        //Đổi Router
         [Route("PayyedDigibank/Send")]
         public ActionResult Index()
         {
-            return View();
-        }
-        public ActionResult SendConfirm()
-        {
+            if(HttpContext.Session.GetInt32("IdCurrentUser") == null)
+            {
+                return RedirectToAction("Login","Users",new { area = "" });
+            }
+
+            //Truyền danh sách Tiền tệ qua bên kia để đổi tiền, nhìn cho đẹp, vcl!!!!!!!
+            ViewBag.lstCurrencies = _context.Currencies.ToList();
+
+            //Lấy thông tin của User đem qua bên kia
+            ViewBag.CurrentUser = _context.Users.Where(us => us.Id == HttpContext.Session.GetInt32("IdCurrentUser")).FirstOrDefault();
+
+            //Lấy danh sách người nhận đem qua bên view
+            ViewBag.AllAddressBookById = _context.AddressBooks.Include(ad => ad.Account).Include(ad => ad.Account.User).Include(ad => ad.User).Where(ad => ad.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
+
+            //Lấy danh sách tài khoản đem qua bên view
+            ViewBag.AccountList = _context.Accounts.Include(acc => acc.User).Include(acc =>acc.AccountType).Where(acc => acc.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
+
+            //Tạo 1 account default
+            ViewBag.AccountDefault = _context.Accounts.Include(acc => acc.User).Include(acc => acc.AccountType).Where(acc => acc.UserId == HttpContext.Session.GetInt32("IdCurrentUser")).ToList().FirstOrDefault();
+
             return View();
         }
 
-        public ActionResult SendSuccess()
+
+        [HttpPost]
+        public ActionResult SendConfirm(string SenderCurrency,double AmountSend, string AccountGet, string AccountFrom)
         {
+            //Lấy thông tin tài khoản nhận
+            ViewBag.Recipient = _context.Accounts.Include(acc => acc.User).Where(acc => acc.Number == AccountGet).ToList().FirstOrDefault();
+
+            //Lấy thông tin tài khoản gửi
+            ViewBag.AccountFrom = AccountFrom;
+
+            //Lấy số tiền
+            ViewBag.Amount = AmountSend;
+
+            //Lấy đơn vị tiền
+            ViewBag.Currency = SenderCurrency;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SendSuccess(string AccountFrom, string AccountTo, double Amount, string Currency, string Description)
+        {
+            //Thêm dữ liệu transaction người gửi vào Db
+            Transaction transaction = new Transaction();
+            transaction.FromAccountId = _context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault().Id;
+            transaction.ToAccountId = _context.Accounts.Where(acc => acc.Number == AccountTo).FirstOrDefault().Id;
+            transaction.Amount = Amount;
+            transaction.CurrencyId = _context.Currencies.Where(cu => cu.Name == Currency).FirstOrDefault().Id;
+            transaction.IssuedDate = DateTime.Now;
+            transaction.Status = true;
+            //Vấn đề phát sinh ở đây này, vì New balance đang tính theo USD nên phải đổi lại, mà đmẹ tại sao có cái newbalacne ở đây ????
+            //À cái newBalance để dùng trong notification
+            //Để dễ thì tính tỷ giá trước
+            double tempAmount = Amount * _context.Currencies.Where(cu => cu.Name == Currency).FirstOrDefault().ExchangeRate;
+            transaction.NewBalanceSender = _context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault().Balance - tempAmount;
+            transaction.NewBalanceRecipient = _context.Accounts.Where(acc => acc.Number == AccountTo).FirstOrDefault().Balance + tempAmount;
+            _context.Transaction.Add(transaction);
+
+
+            //Thay đổi Balance trong Account người nhận
+            Account tempAccount = _context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault();
+            tempAccount.Balance = transaction.NewBalanceSender;
+            _context.Accounts.Update(tempAccount);
+
+            //Thay đổi Balance trong Account người gửi
+            tempAccount = _context.Accounts.Where(acc => acc.Number == AccountTo).FirstOrDefault();
+            tempAccount.Balance = transaction.NewBalanceRecipient;
+
+            _context.SaveChanges();
+            //Hoàn tất cập nhật Db
+
+            //Lưu lại dữ liệu vào ViewBag và đưa qua View
+            ViewBag.Amount = Amount;
+            ViewBag.Currency = Currency;
+            ViewBag.RecipientNumber = AccountTo;
+            ViewBag.RecipientName = _context.Accounts.Include(acc => acc.User).Where(acc => acc.Number == AccountTo).FirstOrDefault().User.FullName;
+
             return View();
         }
 

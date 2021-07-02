@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineBanking.Data;
 
 namespace OnlineBanking.Migrations
 {
     [DbContext(typeof(OnlineBankingContext))]
-    partial class OnlineBankingContextModelSnapshot : ModelSnapshot
+    [Migration("20210702034449_ChangeNewBalanceToDouble")]
+    partial class ChangeNewBalanceToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,10 +209,7 @@ namespace OnlineBanking.Migrations
                     b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("NewBalanceRecipient")
-                        .HasColumnType("float");
-
-                    b.Property<double>("NewBalanceSender")
+                    b.Property<double>("NewBalance")
                         .HasColumnType("float");
 
                     b.Property<bool>("Status")

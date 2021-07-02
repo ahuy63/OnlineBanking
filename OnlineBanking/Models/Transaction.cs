@@ -23,12 +23,17 @@ namespace OnlineBanking.Models
         [InverseProperty("ToTransactions")]
         public Account ToAccount { get; set; }
 
+        public int? CurrencyId { get; set; }
+        public Currency Currency { get; set; }
 
-        public int Amount { get; set; }
-        public int NewBalance { get; set; }
-        
+        public string Description { get; set; }
+        public double Amount { get; set; }
+        public double NewBalanceSender { get; set; }
+        public double NewBalanceRecipient { get; set; }
+
         public DateTime IssuedDate { get; set; }
         public bool Status { get; set; }
+
 
         //Thêm list vào cho dễ truy vấn
         public List<Notification> Notifications { get; set; }

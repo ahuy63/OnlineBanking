@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineBanking.Data;
 
 namespace OnlineBanking.Migrations
 {
     [DbContext(typeof(OnlineBankingContext))]
-    partial class OnlineBankingContextModelSnapshot : ModelSnapshot
+    [Migration("20210701105630_addCurrencyForTransaction")]
+    partial class addCurrencyForTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,8 +31,8 @@ namespace OnlineBanking.Migrations
                     b.Property<int?>("AccountTypeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
+                    b.Property<int>("Balance")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -112,10 +114,7 @@ namespace OnlineBanking.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("CurrencyId")
+                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreate")
@@ -127,8 +126,6 @@ namespace OnlineBanking.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("CurrencyId");
 
                     b.ToTable("Cheques");
                 });
@@ -192,14 +189,11 @@ namespace OnlineBanking.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
 
                     b.Property<int?>("CurrencyId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("FromAccountId")
                         .HasColumnType("int");
@@ -207,11 +201,8 @@ namespace OnlineBanking.Migrations
                     b.Property<DateTime>("IssuedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("NewBalanceRecipient")
-                        .HasColumnType("float");
-
-                    b.Property<double>("NewBalanceSender")
-                        .HasColumnType("float");
+                    b.Property<int>("NewBalance")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -318,15 +309,7 @@ namespace OnlineBanking.Migrations
                         .WithMany("Cheques")
                         .HasForeignKey("AccountId");
 
-                    b.HasOne("OnlineBanking.Models.Currency", "currency")
-                        .WithMany("Cheques")
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Accounts");
-
-                    b.Navigation("currency");
                 });
 
             modelBuilder.Entity("OnlineBanking.Models.Notification", b =>
@@ -346,7 +329,7 @@ namespace OnlineBanking.Migrations
 
             modelBuilder.Entity("OnlineBanking.Models.Transaction", b =>
                 {
-                    b.HasOne("OnlineBanking.Models.Currency", "Currency")
+                    b.HasOne("OnlineBanking.Models.Currency", "currency")
                         .WithMany("Transactions")
                         .HasForeignKey("CurrencyId");
 
@@ -358,7 +341,7 @@ namespace OnlineBanking.Migrations
                         .WithMany("ToTransactions")
                         .HasForeignKey("ToAccountId");
 
-                    b.Navigation("Currency");
+                    b.Navigation("currency");
 
                     b.Navigation("FromAccount");
 
@@ -383,8 +366,6 @@ namespace OnlineBanking.Migrations
 
             modelBuilder.Entity("OnlineBanking.Models.Currency", b =>
                 {
-                    b.Navigation("Cheques");
-
                     b.Navigation("Transactions");
                 });
 
