@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Send/Request";
+    var _context = ViewBag.Context as OnlineBankingContext;
 }
 
 <!-- Secondary menu
@@ -52,7 +53,8 @@
                         <!--Account Gets-->
                         <div class="form-group">
                             <label>To Account</label>
-                            <input name="AccountGet" type="text" value="" class="form-control" data-bv-field="emailid" id="RecipientNumber" required placeholder="Enter Recipient's Account Number"></input>
+                            <input name="AccountGet" type="text" value="@ViewBag.AccountRecipientDefault" class="form-control" data-bv-field="emailid" id="RecipientNumber" required placeholder="Enter Recipient's Account Number"></input>
+                            
                             <div class="input-group-append">
                                 <span class="input-group-text p-0">
                                     <select id="AddressBook" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="fillRecipientNumber()">
