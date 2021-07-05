@@ -87,7 +87,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             double tempAmount = Amount * _context.Currencies.Where(cu => cu.Name == Currency).FirstOrDefault().ExchangeRate;
             transaction.NewBalanceSender = _context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault().Balance - tempAmount;
             transaction.NewBalanceRecipient = _context.Accounts.Where(acc => acc.Number == AccountTo).FirstOrDefault().Balance + tempAmount;
-            _context.Transaction.Add(transaction);
+            _context.Transactions.Add(transaction);
 
 
             //Thay đổi Balance trong Account người nhận
@@ -119,7 +119,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
                 return NotFound();
             }
 
-            var transaction = await _context.Transaction
+            var transaction = await _context.Transactions
                 .Include(t => t.FromAccount)
                 .Include(t => t.ToAccount)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -165,7 +165,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
                 return NotFound();
             }
 
-            var transaction = await _context.Transaction.FindAsync(id);
+            var transaction = await _context.Transactions.FindAsync(id);
             if (transaction == null)
             {
                 return NotFound();
@@ -220,7 +220,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
                 return NotFound();
             }
 
-            var transaction = await _context.Transaction
+            var transaction = await _context.Transactions
                 .Include(t => t.FromAccount)
                 .Include(t => t.ToAccount)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -237,15 +237,15 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transaction = await _context.Transaction.FindAsync(id);
-            _context.Transaction.Remove(transaction);
+            var transaction = await _context.Transactions.FindAsync(id);
+            _context.Transactions.Remove(transaction);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TransactionExists(int id)
         {
-            return _context.Transaction.Any(e => e.Id == id);
+            return _context.Transactions.Any(e => e.Id == id);
         }
     }
 }

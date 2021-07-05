@@ -16,7 +16,7 @@ namespace OnlineBanking.Data
         public DbSet<AccountType> AccountTypes { get; set; }
         public DbSet<Cheque> Cheques { get; set; }
         public DbSet<AddressBook> AddressBooks { get; set; }
-        public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Currency> Currencies { get; set; }
     }
