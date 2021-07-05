@@ -25,17 +25,11 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         public IActionResult Index()
         {
             int userid = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
-            ViewData["AccountList"] = _context.Accounts.Include(a => a.AccountType).Include(a => a.User).Where(a => a.UserId == userid);
+            ViewData["AccountList"] = _context.Accounts.Include(a => a.AccountType).Include(a => a.User).Where(a => a.UserId == userid).ToList();
             ViewData["AccountTypeId"] = new SelectList(_context.AccountTypes, "Id", "Name");
+            ViewData["AccountNumber"] = _context.Accounts.Select(a => a.Number).ToList();
             return View();
-        }
 
-        // GET: UserSection/Accounts/Create
-        public IActionResult Create()
-        {
-            ViewData["AccountTypeId"] = new SelectList(_context.AccountTypes, "Id", "Name");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address");
-            return View();
         }
 
         // POST: UserSection/Accounts/Create
@@ -43,10 +37,14 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,AccountTypeId,Number,Balance,CreateDate,Status")] Account account)
+        public async Task<IActionResult> Create([Bind("AccountTypeId,Number,")] Account account)
         {
             if (ModelState.IsValid)
             {
+                account.UserId = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+                account.Balance = 0;
+                account.CreateDate = DateTime.Now;
+                account.Status = true;
                 _context.Add(account);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
