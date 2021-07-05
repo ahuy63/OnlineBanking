@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,30 +22,12 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         }
 
         [Route("PayyedDigibank/User/Accounts")]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var onlineBankingContext = _context.Accounts.Include(a => a.AccountType).Include(a => a.User);
-            return View(await onlineBankingContext.ToListAsync());
-        }
-
-        // GET: UserSection/Accounts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var account = await _context.Accounts
-                .Include(a => a.AccountType)
-                .Include(a => a.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (account == null)
-            {
-                return NotFound();
-            }
-
-            return View(account);
+            int userid = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            ViewData["AccountList"] = _context.Accounts.Include(a => a.AccountType).Include(a => a.User).Where(a => a.UserId == userid);
+            ViewData["AccountTypeId"] = new SelectList(_context.AccountTypes, "Id", "Name");
+            return View();
         }
 
         // GET: UserSection/Accounts/Create
