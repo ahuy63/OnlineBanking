@@ -51,7 +51,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         // GET: UserSection/Notifications/Create
         public IActionResult Create()
         {
-            ViewData["TransactionId"] = new SelectList(_context.Transaction, "Id", "Id");
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "Id", "Id");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address");
             return View();
         }
@@ -69,7 +69,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TransactionId"] = new SelectList(_context.Transaction, "Id", "Id", notification.TransactionId);
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "Id", "Id", notification.TransactionId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address", notification.UserId);
             return View(notification);
         }
@@ -87,7 +87,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             {
                 return NotFound();
             }
-            ViewData["TransactionId"] = new SelectList(_context.Transaction, "Id", "Id", notification.TransactionId);
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "Id", "Id", notification.TransactionId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address", notification.UserId);
             return View(notification);
         }
@@ -124,7 +124,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TransactionId"] = new SelectList(_context.Transaction, "Id", "Id", notification.TransactionId);
+            ViewData["TransactionId"] = new SelectList(_context.Transactions, "Id", "Id", notification.TransactionId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address", notification.UserId);
             return View(notification);
         }

@@ -1,9 +1,26 @@
 ﻿<!-- Header
         ============================================= -->
-@{ 
+@{
     //Lấy _context để access vào DB
     var _context = ViewBag.Context as OnlineBankingContext;
 }
+
+
+@{
+    //Lấy ra những thông báo là người nhận
+    List<Notification> allNotificationBeRecipient = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Where(noti => noti.Transaction.ToAccount.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
+
+    //Lấy ra những thông báo là người gửi
+    List<Notification> allNotificationBeSender = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Where(noti => noti.Transaction.FromAccount.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
+
+    //Lấy ra tất cả thông báo
+    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Where(noti => (noti.Transaction.FromAccount.UserId == Context.Session.GetInt32("IdCurrentUser") || noti.Transaction.ToAccount.UserId == Context.Session.GetInt32("IdCurrentUser"))).ToList();
+
+
+}
+
+
+
 
 
 
@@ -12,15 +29,15 @@
         <div class="header-row">
             <div class="header-column justify-content-start">
                 <!-- Logo
-        ============================= -->
+                ============================= -->
                 <div class="logo"> <a class="d-flex" asp-area="" asp-controller="Home" asp-action="Index" title="Payyed - HTML Template"><img src="@Url.Content("~/images/logo.png")" alt="Payyed" /></a> </div>
                 <!-- Logo end -->
                 <!-- Collapse Button
-        ============================== -->
+                ============================== -->
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header-nav"> <span></span> <span></span> <span></span> </button>
                 <!-- Collapse Button end -->
                 <!-- Primary Navigation
-        ============================== -->
+                ============================== -->
                 <nav class="primary-menu navbar navbar-expand-lg">
                     <div id="header-nav" class="collapse navbar-collapse">
                         <ul class="navbar-nav mr-auto">
@@ -35,40 +52,50 @@
             </div>
             <div class="header-column justify-content-end">
                 <!-- Login & Signup Link
-        ============================== -->
+                ============================== -->
                 <nav class="login-signup navbar navbar-expand">
                     <ul class="navbar-nav">
 
 
                         <!--Cái chuông noti ở đây-->
-                        <li class="nav-item dropdown ">
-                            <a href="#" onclick="return false;" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
-                                <i class="fa fa-bell" style="font-size: 25px; float: left; color: black">
-                                </i>
-                            </a>
-                            <span class="badge badge-danger">6</span>
-                            <ul class="dropdown-menu dropdown-menu-left pull-right" role="menu" aria-labelledby="dropdownMenu1">
-                                <li role="presentation">
-                                    <a href="#" class="dropdown-menu-header">Notifications</a>
-                                </li>
-                                <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px">
-
-
-                                    <!--Foreach ở đây-->
-                                    <li>
-                                        <p>
-                                            Your “Volume Trendline” PDF is ready <a href="">here</a>
-                                            <span class="timeline-icon"><i class="fa fa-file-pdf-o" style="color:red"></i></span>
-                                            <span class="timeline-date">Dec 10, 22:00</span>
-                                        </p>
+                        <li>
+                            <div class="dropdown" style="float: right; padding: 20px">
+                                <a href="#" onclick="return false;" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
+                                    <i class="fa fa-bell" style="font-size: 25px; float: left; color: black">
+                                    </i>
+                                </a>
+                                <span class="badge badge-danger">6</span>
+                                <ul class="dropdown-menu dropdown-menu-left pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                                    <li role="presentation">
+                                        <a href="#" class="dropdown-menu-header">Notifications</a>
                                     </li>
-
-
+                                    <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px">
+                                        @foreach (Notification noti in allNotificationBeSender)
+                                        {
+                                            <li>
+                                                <p>
+                                                    Bạn vừa chuyển đến tài khoản @noti.Transaction.ToAccount.User.FullName số tiền @noti.Transaction.Amount @noti.Transaction.Currency.Name<br /><br />
+                                                    Số tiền Còn lại trong tài khoản @noti.Transaction.NewBalanceSender USD
+                                                    <span class="timeline-date">@noti.Transaction.IssuedDate</span>
+                                                </p>
+                                            </li>
+                                        }
+                                        @foreach (Notification noti in allNotificationBeRecipient)
+                                        {
+                                            <li>
+                                                <p>
+                                                    Bạn vừa nhận được só tiển @noti.Transaction.Amount @noti.Transaction.Currency.Name từ  @noti.Transaction.FromAccount.Number - @noti.Transaction.FromAccount.User.FullName<br /><br />
+                                                    Số tiền hiện có trong tài khoản @noti.Transaction.NewBalanceRecipient USD
+                                                    <span class="timeline-date">@noti.Transaction.IssuedDate</span>
+                                                </p>
+                                            </li>
+                                        }
+                                    </ul>
+                                    <li role="presentation">
+                                        <a href="#" class="dropdown-menu-header"></a>
+                                    </li>
                                 </ul>
-                                <li role="presentation">
-                                    <a href="#" class="dropdown-menu-header"></a>
-                                </li>
-                            </ul>
+                            </div>
                         </li>
                         <!--Kêt thúc chuông-->
 
