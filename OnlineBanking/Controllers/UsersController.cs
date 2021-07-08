@@ -102,7 +102,7 @@ namespace OnlineBanking.Controllers
 
             //Tạo 1 mã ngẫu nhiên
             Random random = new Random();
-            NumberCode = random.Next(1000, 99999);
+            NumberCode = random.Next(10000, 999999);
             string message = "Your code is:" + NumberCode.ToString();
 
             //Gửi Email, phương thức gửi email nằm trong class EmailUser
