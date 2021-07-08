@@ -47,7 +47,7 @@ namespace OnlineBanking.Models
        // [Required(ErrorMessage = "{0} Identity Card Cannot Be Blank")]
         public string IdentityCard { get; set; }
 
-        public bool? IsAdmin { get; set; }
+        public bool IsAdmin { get; set; }
         public bool? Status { get; set; }
 
         //Thêm các List cho dễ truy vấn

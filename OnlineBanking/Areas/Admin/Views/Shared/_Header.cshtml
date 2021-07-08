@@ -1,0 +1,86 @@
+﻿<!-- Header
+        ============================================= -->
+@{
+    //Lấy _context để access vào DB
+    var _context = ViewBag.Context as OnlineBankingContext;
+}
+
+
+@{
+
+    //Lấy ra tất cả thông báo
+    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
+
+
+}
+<header class="header">
+            <div class="header__inner">
+                <div class="container-fluid">
+                    <div class="header__row row justify-content-between">
+                        <div class="header__col-left col d-flex align-items-center">
+                            <div class="header__left-toggle">
+                                <button class="header__toggle-menu toggle-sidebar" type="button">
+                                    <svg class="icon-icon-menu">
+                                        <use xlink:href="#icon-menu"></use>
+                                    </svg>
+                                </button>
+                                <button class="header__toggle-search toggle-search">
+                                    <svg class="icon-icon-search">
+                                        <use xlink:href="#icon-search"></use>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="header__search">
+                                <form class="form-search" action="#" method="GET">
+                                    <div class="form-search__container">
+                                        <span class="form-search__icon-left">
+                                            <svg class="icon-icon-search">
+                                                <use xlink:href="#icon-search"></use>
+                                            </svg>
+                                        </span>
+                                        <input class="form-search__input" type="text" placeholder="Search..." />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="header__profile dropdown">
+                            <a class="header__profile-toggle dropdown__toggle" href="#" data-toggle="dropdown">
+                                <div class="header__profile-image">
+                                    <span class="header__profile-image-text">MA</span>
+                                    <img src="img/content/humans/item-4.jpg" alt="#" />
+                                </div>
+                                <div class="header__profile-text">
+
+                                    @*Ten admin*@
+                                    <span>Mark Anderson</span>
+
+                                </div><span class="icon-arrow-down">
+                                    <svg class="icon-icon-arrow-down">
+                                        <use xlink:href="#icon-arrow-down"></use>
+                                    </svg>
+                                </span>
+                            </a>
+                            <div class="profile-dropdown dropdown-menu dropdown-menu--right">
+                                <a class="profile-dropdown__item dropdown-menu__item" href="#" tabindex="0">
+                                    <span class="profile-dropdown__icon">
+                                        <svg class="icon-icon-user">
+                                            <use xlink:href="#icon-user"></use>
+                                        </svg>
+                                    </span><span>My Profile</span>
+                                </a>
+                                <div class="dropdown-menu__divider"></div><a class="profile-dropdown__item dropdown-menu__item" href="#" tabindex="0">
+                                    <span class="profile-dropdown__icon">
+                                        <svg class="icon-icon-logout">
+                                            <use xlink:href="#icon-logout"></use>
+                                        </svg>
+                                    </span><span>Logout</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </header></script>
+
+
