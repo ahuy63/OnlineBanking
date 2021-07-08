@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Send/Request";
+    var _context = ViewBag.Context as OnlineBankingContext;
     //Layout = "_SubUserLayout";
 }
 
@@ -11,7 +12,7 @@
 <div class="bg-primary">
     <div class="container d-flex justify-content-center">
         <ul class="nav secondary-nav">
-            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Send" asp-action="Index" >Send</a></li>
+            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Send" asp-action="Index">Send</a></li>
             <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Cheques" asp-action="Index">Request</a></li>
         </ul>
     </div>
@@ -25,7 +26,7 @@
 
         <!--Lấy người nhận ở đây-->
         <p class="text-4 text-center mb-4">You are sending money to <span class="font-weight-500">@ViewBag.Recipient.Number - @ViewBag.Recipient.User.FullName</span></p>
-        
+
         <div class="row">
             <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
                 <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
@@ -33,6 +34,12 @@
                     <!-- Send Money Confirm
                     ============================================= -->
                     <form id="form-send-money" asp-area="UserSection" asp-controller="Send" asp-action="SendSuccess" method="post">
+                        <div class="form-group">
+                            <h4 class="font-weight-400 mb-4">We have send a Code to your Email - @_context.Users.Where(use => use.Id == Context.Session.GetInt32("IdCurrentUser")).FirstOrDefault().Email, please input the code</h4>
+                            <label>Code</label>
+                            <input type="text" class="form-control" required placeholder="Enter The Code" name="OTP">
+                        </div>
+
                         <div class="form-group">
                             <label for="description">Description</label>
                             <textarea name="Description" class="form-control" rows="4" id="description" required placeholder="Payment Description"></textarea>
@@ -54,6 +61,12 @@
                         <input type="hidden" name="Amount" value="@ViewBag.Amount" />
                         <input type="hidden" name="Currency" value="@ViewBag.Currency" />
                         <!--Thêm hết vào đm-->
+                        <!--À còn thêm xem user muốn lưu người nhận không nữa, lòng vòng vãi-->
+                        @if (ViewBag.IsNewAddressBook)
+                        {
+                            <p class="font-weight-500>Save Recipient To Your Address Book</p>
+                            <input type="checkbox" value="true" name="IsWantToSave" />
+                        }
                         <button class="btn btn-primary btn-block" type="submit">Send Money</button>
                     </form>
 

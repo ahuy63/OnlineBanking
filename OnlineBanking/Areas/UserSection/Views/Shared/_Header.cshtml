@@ -7,14 +7,9 @@
 
 
 @{
-    //Lấy ra những thông báo là người nhận
-    List<Notification> allNotificationBeRecipient = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Where(noti => noti.Transaction.ToAccount.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
-
-    //Lấy ra những thông báo là người gửi
-    List<Notification> allNotificationBeSender = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Where(noti => noti.Transaction.FromAccount.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
 
     //Lấy ra tất cả thông báo
-    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Where(noti => (noti.Transaction.FromAccount.UserId == Context.Session.GetInt32("IdCurrentUser") || noti.Transaction.ToAccount.UserId == Context.Session.GetInt32("IdCurrentUser"))).ToList();
+    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
 
 
 }
@@ -60,37 +55,46 @@
                         <!--Cái chuông noti ở đây-->
                         <li>
                             <div class="dropdown" style="float: right; padding: 20px">
-                                <a href="#" onclick="return false;" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
+                                <a href="#" onclick="setAllNotiBeHaveRead()" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
                                     <i class="fa fa-bell" style="font-size: 25px; float: left; color: black">
                                     </i>
                                 </a>
-                                <span class="badge badge-danger">6</span>
+                                @if (_context.Notifications.Where(noti => !noti.HaveRead && noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Count() != 0)
+                                {
+                                    <span class="badge badge-danger" id="CountNotification">@_context.Notifications.Where(noti => !noti.HaveRead && noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Count()</span>
+                                }
                                 <ul class="dropdown-menu dropdown-menu-left pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
                                         <a href="#" class="dropdown-menu-header">Notifications</a>
                                     </li>
-                                    <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px">
-                                        @foreach (Notification noti in allNotificationBeSender)
-                                        {
-                                            <li>
-                                                <p>
-                                                    Bạn vừa chuyển đến tài khoản @noti.Transaction.ToAccount.User.FullName số tiền @noti.Transaction.Amount @noti.Transaction.Currency.Name<br /><br />
-                                                    Số tiền Còn lại trong tài khoản @noti.Transaction.NewBalanceSender USD
-                                                    <span class="timeline-date">@noti.Transaction.IssuedDate</span>
-                                                </p>
-                                            </li>
-                                        }
-                                        @foreach (Notification noti in allNotificationBeRecipient)
-                                        {
-                                            <li>
-                                                <p>
-                                                    Bạn vừa nhận được só tiển @noti.Transaction.Amount @noti.Transaction.Currency.Name từ  @noti.Transaction.FromAccount.Number - @noti.Transaction.FromAccount.User.FullName<br /><br />
-                                                    Số tiền hiện có trong tài khoản @noti.Transaction.NewBalanceRecipient USD
-                                                    <span class="timeline-date">@noti.Transaction.IssuedDate</span>
-                                                </p>
-                                            </li>
-                                        }
-                                    </ul>
+                                    @if (allNoti.Count() > 0)
+                                    {
+                                        <ul class="timeline timeline-icons timeline-sm" style="margin:10px;width:210px">
+                                            @foreach (Notification noti in allNoti)
+                                            {
+                                                if (noti.Message == "Send")
+                                                {
+                                                    <li>
+                                                        <p>
+                                                            Bạn vừa chuyển đến tài khoản @noti.Transaction.ToAccount.User.FullName số tiền @noti.Transaction.Amount @noti.Transaction.Currency.Name<br /><br />
+                                                            Số tiền Còn lại trong tài khoản @noti.Transaction.NewBalanceSender USD
+                                                            <span class="timeline-date">@noti.Transaction.IssuedDate</span>
+                                                        </p>
+                                                    </li>
+                                                }
+                                                else if (noti.Message == "Get")
+                                                {
+                                                    <li>
+                                                        <p>
+                                                            Bạn vừa nhận được só tiển @noti.Transaction.Amount @noti.Transaction.Currency.Name từ  @noti.Transaction.FromAccount.Number - @noti.Transaction.FromAccount.User.FullName<br /><br />
+                                                            Số tiền hiện có trong tài khoản @noti.Transaction.NewBalanceRecipient USD
+                                                            <span class="timeline-date">@noti.Transaction.IssuedDate</span>
+                                                        </p>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    }
                                     <li role="presentation">
                                         <a href="#" class="dropdown-menu-header"></a>
                                     </li>
@@ -100,7 +104,7 @@
                         <!--Kêt thúc chuông-->
 
                         <li><a asp-area="UserSection" asp-controller="Users" asp-action="Index">Settings</a> </li>
-                        <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-outline-primary shadow-none d-none d-sm-block" href="">Sign out</a></li>
+                        <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-outline-primary shadow-none d-none d-sm-block" asp-area="" asp-controller="Users" asp-action="SignOut">Sign out</a></li>
                     </ul>
                 </nav>
                 <!-- Login & Signup Link end -->
@@ -109,3 +113,20 @@
     </div>
 </header>
 <!-- Header End -->
+
+<script type="text/javascript">
+    function setAllNotiBeHaveRead() {
+        @foreach(Notification noti in _context.Notifications.Where(noti => !noti.HaveRead && noti.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList())
+        {
+            noti.HaveRead = true;
+            _context.Update(noti);
+            _context.SaveChanges();
+        }
+        document.getElementById("CountNotification").innerHTML = "";
+        return false;
+    }
+
+
+</script>
+
+

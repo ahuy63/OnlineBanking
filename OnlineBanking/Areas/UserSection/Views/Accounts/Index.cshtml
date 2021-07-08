@@ -75,99 +75,97 @@
                 <div class="bg-light shadow-sm rounded p-4 mb-4">
                     <h3 class="text-5 font-weight-400 mb-4">Bank Accounts <span class="text-muted text-4">(for withdrawal)</span></h3>
                     <div class="row">
+                        <!-- chỗ này cần kiểm tra xem người dùng họ đã có tài khoản nào chưa-->
                         @{
-                            string divclass = "", status = "", iconclass = "", cardnumber = "", style = "";
-                            int i = 0;
-                            foreach (var item in ViewBag.AccountList)
+                            if (ViewBag.AccountList != null)
                             {
-                                if (item.Status)
-                                {
-                                    divclass = "account-card-primary";
-                                    status = "Approved";
-                                    iconclass = "fa-check-circle";
-                                    style = "";
-                                }
-                                else
-                                {
-                                    divclass = "account-card-expire";
-                                    status = "Declined";
-                                    iconclass = "fa-times-circle";
-                                    style = "color: red";
-                                }
-                                i++;
-                                cardnumber = item.Number;
-                                <div class="col-12 col-sm-6">
-                                    <div class="account-card @divclass text-white rounded mb-4 mb-lg-0">
-                                        <div class="row no-gutters">
-                                            <div class="col-3 d-flex justify-content-center p-3">
-                                                <div class="my-auto text-center text-13">
-                                                    <i class="fas fa-university"></i>
-                                                    @*<p class="bg-light text-0 text-body font-weight-500 rounded-pill d-inline-block px-2 line-height-4 opacity-8 mb-0">Primary</p>*@
-                                                </div>
-                                            </div>
-                                            <div class="col-9 border-left">
-                                                <div class="py-4 my-2 pl-4">
-                                                    <p class="text-4 font-weight-500 mb-1">Payyed Bank</p>
-                                                    <p class="text-4 opacity-9 mb-1">XXXX-XXXX-XXXX-@cardnumber.Substring(cardnumber.Length - 4)</p>
-                                                    <p class="text-4 opacity-9 mb-1">Balance: $@item.Balance</p>
-                                                    <p class="m-0">@status <span class="text-3"><i class="fas @iconclass"></i></span></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete</a> </div>
-                                    </div>
-                                </div>
+                                string divclass = "", status = "", iconclass = "", cardnumber = "", style = "";
 
-                                <!-- Edit Bank Account Details Modal
-            ======================================== -->
-                                <div id="modal-@item.Id" class="modal fade" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered transaction-details" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                <div class="row no-gutters">
-                                                    <div class="col-sm-5 d-flex justify-content-center bg-primary rounded-left py-4">
-                                                        <div class="my-auto text-center">
-                                                            <div class="text-17 text-white mb-3"><i class="fas fa-university"></i></div>
-                                                            <h3 class="text-6 text-white my-3">Payyed Bank</h3>
-                                                            <div class="text-4 text-white my-4">XXXX-@cardnumber.Substring(cardnumber.Length - 4)</div>
-                                                            <p class="text-4 text-white my-4">Balance: $@item.Balance</p>
-                                                            @*<p class="bg-light text-0 text-body font-weight-500 rounded-pill d-inline-block px-2 line-height-4 mb-0">Primary</p>*@
-                                                        </div>
+                                foreach (var item in ViewBag.AccountList)
+                                {
+                                    if (item.Status)
+                                    {
+                                        divclass = "account-card-primary";
+                                        status = "Approved";
+                                        iconclass = "fa-check-circle";
+                                        style = "";
+                                    }
+                                    else
+                                    {
+                                        divclass = "account-card-expire";
+                                        status = "Declined";
+                                        iconclass = "fa-times-circle";
+                                        style = "color: red";
+                                    }
+                                    cardnumber = item.Number;
+                                    <div class="col-12 col-sm-6">
+                                        <div class="account-card @divclass text-white rounded mb-4 mb-lg-0">
+                                            <div class="row no-gutters">
+                                                <div class="col-3 d-flex justify-content-center p-3">
+                                                    <div class="my-auto text-center text-13">
+                                                        <i class="fas fa-university"></i>
+                                                        @*<p class="bg-light text-0 text-body font-weight-500 rounded-pill d-inline-block px-2 line-height-4 opacity-8 mb-0">Primary</p>*@
                                                     </div>
-                                                    <div class="col-sm-7">
-                                                        <h5 class="text-5 font-weight-400 m-3">
-                                                            Bank Account Details
-                                                            <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                                                        </h5>
-                                                        <hr>
-                                                        <div class="px-3">
-                                                            <ul class="list-unstyled">
-                                                                <li class="font-weight-500">Account Type:</li>
-                                                                <li class="text-muted">@item.AccountType.Name</li>
-                                                            </ul>
-                                                            <ul class="list-unstyled">
-                                                                <li class="font-weight-500">Account Name:</li>
-                                                                <li class="text-muted">@item.User.FullName</li>
-                                                            </ul>
-                                                            <ul class="list-unstyled">
-                                                                <li class="font-weight-500">Account Number:</li>
-                                                                <li class="text-muted">@item.Number</li>
-                                                            </ul>
-                                                            <ul class="list-unstyled">
-                                                                <li class="font-weight-500">Status:</li>
-                                                                <li class="text-muted">@status <span class="text-success text-3"><i class="fas @iconclass" style="@style"></i></span></li>
-                                                            </ul>
-                                                            <p><a href="#" class="btn btn-sm btn-outline-danger btn-block shadow-none"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete Account</a></p>
+                                                </div>
+                                                <div class="col-9 border-left">
+                                                    <div class="py-4 my-2 pl-4">
+                                                        <p class="text-4 font-weight-500 mb-1">Payyed Bank</p>
+                                                        <p class="text-4 opacity-9 mb-1">XXXX-XXXX-XXXX-@cardnumber.Substring(cardnumber.Length - 4)</p>
+                                                        <p class="text-4 opacity-9 mb-1">Balance: $@item.Balance</p>
+                                                        <p class="m-0">@status <span class="text-3"><i class="fas @iconclass"></i></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete</a> </div>
+                                        </div>
+                                    </div>
+                                    <!-- Edit Bank Account Details Modal
+                                    ======================================== -->
+                                    <div id="modal-@item.Id" class="modal fade" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered transaction-details" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="row no-gutters">
+                                                        <div class="col-sm-5 d-flex justify-content-center bg-primary rounded-left py-4">
+                                                            <div class="my-auto text-center">
+                                                                <div class="text-17 text-white mb-3"><i class="fas fa-university"></i></div>
+                                                                <h3 class="text-6 text-white my-3">Payyed Bank</h3>
+                                                                <div class="text-4 text-white my-4">XXXX-@cardnumber.Substring(cardnumber.Length - 4)</div>
+                                                                <p class="text-4 text-white my-4">Balance: $@item.Balance</p>
+                                                                @*<p class="bg-light text-0 text-body font-weight-500 rounded-pill d-inline-block px-2 line-height-4 mb-0">Primary</p>*@
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-7">
+                                                            <h5 class="text-5 font-weight-400 m-3">
+                                                                Bank Account Details
+                                                                <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                                            </h5>
+                                                            <hr>
+                                                            <div class="px-3">
+                                                                <ul class="list-unstyled">
+                                                                    <li class="font-weight-500">Account Type:</li>
+                                                                    <li class="text-muted">@item.AccountType.Name</li>
+                                                                </ul>
+                                                                <ul class="list-unstyled">
+                                                                    <li class="font-weight-500">Account Name:</li>
+                                                                    <li class="text-muted">@item.User.FullName</li>
+                                                                </ul>
+                                                                <ul class="list-unstyled">
+                                                                    <li class="font-weight-500">Account Number:</li>
+                                                                    <li class="text-muted">@item.Number</li>
+                                                                </ul>
+                                                                <ul class="list-unstyled">
+                                                                    <li class="font-weight-500">Status:</li>
+                                                                    <li class="text-muted">@status <span class="text-success text-3"><i class="fas @iconclass" style="@style"></i></span></li>
+                                                                </ul>
+                                                                <p><a href="#" class="btn btn-sm btn-outline-danger btn-block shadow-none"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete Account</a></p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                if (i % 2 == 0)
-                                {
-                                    <hr /><br><br /><br />
                                 }
                             }
                         }
@@ -200,7 +198,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="accountName">Account Name</label>
-                                        <input type="text" class="form-control" data-bv-field="accountName" id="accountName" value="@ViewBag.AccountList[0].User.FullName" readonly>
+                                        <input type="text" class="form-control" data-bv-field="accountName" id="accountName" value="@Context.Session.GetString("NameCurrentUser")" readonly>
                                     </div>
                                     <div class="form-group">
                                         <label for="accountNumber">Account Number</label>
