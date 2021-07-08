@@ -77,7 +77,7 @@
                     <div class="row">
                         @{
                             string divclass = "", status = "", iconclass = "", cardnumber = "", style = "";
-
+                            int i = 0;
                             foreach (var item in ViewBag.AccountList)
                             {
                                 if (item.Status)
@@ -94,6 +94,7 @@
                                     iconclass = "fa-times-circle";
                                     style = "color: red";
                                 }
+                                i++;
                                 cardnumber = item.Number;
                                 <div class="col-12 col-sm-6">
                                     <div class="account-card @divclass text-white rounded mb-4 mb-lg-0">
@@ -116,8 +117,9 @@
                                         <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete</a> </div>
                                     </div>
                                 </div>
+
                                 <!-- Edit Bank Account Details Modal
-                                ======================================== -->
+            ======================================== -->
                                 <div id="modal-@item.Id" class="modal fade" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered transaction-details" role="document">
                                         <div class="modal-content">
@@ -163,6 +165,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                if (i % 2 == 0)
+                                {
+                                    <hr /><br><br /><br />
+                                }
                             }
                         }
 
