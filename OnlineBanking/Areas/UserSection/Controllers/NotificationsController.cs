@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -164,5 +166,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         {
             return _context.Notifications.Any(e => e.Id == id);
         }
-    }
+    } 
 }
+
+

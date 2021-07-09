@@ -33,6 +33,7 @@
                         <!--Account From-->
                         <h4 class="text-warning">@ViewBag.ErrorOTP</h4>
                         <div class="form-group">
+                            <lable>Choose Account To Send Money</label>
                             <div class="input-group-append">
                                 <span class="input-group-text p-0">
                                     <select id="SenderAccountList" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="changeSenderAccount()">
@@ -79,7 +80,6 @@
                             <label for="youSend">You Send</label><br />
                             <label class="text-danger">@ViewBag.ErrorBalance</label>
                             <div class="input-group">
-                                <div class="input-group-prepend"> <span class="input-group-text">$</span> </div>
                                 <input name="AmountSend" asp-for="Amount" class="form-control" data-bv-field="youSend" id="youSend" value="100" oninput="caculateCurrency(); caculateTotal()">
                                 <div class="input-group-append">
                                     <span class="input-group-text p-0">
@@ -110,7 +110,6 @@
                         <div class="form-group">
                             <label for="recipientGets">Recipient Gets</label>
                             <div class="input-group">
-                                <div class="input-group-prepend"> <span class="input-group-text">$</span> </div>
                                 <input type="text" class="form-control" data-bv-field="recipientGets" id="recipientGets" oninput="caculateCurrencyForSender(); caculateTotal()">
                                 <div class="input-group-append">
                                     <span class="input-group-text p-0">

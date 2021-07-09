@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineBanking.Data;
 using OnlineBanking.Models;
+using OnlineBanking.MyClass;
 
 namespace OnlineBanking.Areas.UserSection.Controllers
 {
@@ -23,6 +25,26 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         [Route("PayyedDigibank/Request")]
         public ActionResult Index()
         {
+            if (HttpContext.Session.GetInt32("IdCurrentUser") == null)
+            {
+                return RedirectToAction("Login", "Users", new { area = "" });
+            }
+
+            if (_context.Accounts.Where(acc => acc.UserId == HttpContext.Session.GetInt32("IdCurrentUser")).Count() == 0)
+            {
+                return RedirectToAction("Index", "Accounts");
+            }
+
+            ViewBag.ErrorBalance = TempData["ErrorBalance"];
+
+            //Lấy tất cả Account của người đó
+            ViewBag.AccountList = _context.Accounts.Include(acc=>acc.AccountType).Where(acc => acc.UserId == HttpContext.Session.GetInt32("IdCurrentUser")).ToList();
+
+            //Lấy thông tin của User đó
+            ViewBag.CurrentUser = _context.Users.Where(us => us.Id == HttpContext.Session.GetInt32("IdCurrentUser")).FirstOrDefault();
+
+            
+            
             return View();
         }
 
@@ -155,6 +177,47 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         private bool ChequeExists(int id)
         {
             return _context.Cheques.Any(e => e.Id == id);
+        }
+
+
+        //Action confirm của Cheque
+        [HttpPost]
+        public IActionResult ChequeConfirm(string AccountFrom, string AddressUser, double Amount, string SenderCurrency)
+        {
+            //Tính toán số tiền còn lại sau khi request
+            double newBalance = _context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault().Balance - Amount / (_context.Currencies.Where(curr => curr.Name == SenderCurrency).FirstOrDefault().ExchangeRate);
+            if(newBalance <= 0)
+            {
+                TempData["ErrorBalance"] = "Your Balance is not Enough For This Request, please Try Again!!!!";
+                return RedirectToAction("Index","Cheques");
+            }
+
+            
+            //Cần phải validate bằng mail chứ ko thì mất tiền ăn l**
+            //Tạo 1 mã ngẫu nhiên
+            Random random = new Random();
+            int OTPNumber = random.Next(10000, 999999);
+            HttpContext.Session.SetInt32("OTPSendMoney", OTPNumber);
+            string message = "Your OTP Number is:" + OTPNumber.ToString();
+            //Gửi Email
+            EmailUser emailUser = new EmailUser(_context.Users.Where(use => use.Id == HttpContext.Session.GetInt32("IdCurrentUser")).FirstOrDefault().Email, "Send OTP", message);
+            emailUser.SendEmail(emailUser);
+
+
+            ViewBag.AccountFrom = AccountFrom;
+            ViewBag.Amount = Amount;
+            ViewBag.SenderCurrency = SenderCurrency;
+            ViewBag.AddressUser = AddressUser;
+            ViewBag.NewBalance = newBalance;
+            
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChequeSuccess()
+        {
+            return View();
         }
     }
 }

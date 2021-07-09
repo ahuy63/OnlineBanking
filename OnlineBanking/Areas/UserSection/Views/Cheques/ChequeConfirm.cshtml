@@ -1,0 +1,68 @@
+﻿@model OnlineBanking.Models.Transaction
+
+@{
+    ViewData["Title"] = "Send/Request";
+    var _context = ViewBag.Context as OnlineBankingContext;
+    //Layout = "_SubUserLayout";
+}
+
+
+<!-- Secondary menu
+  ============================================= -->
+<div class="bg-primary">
+    <div class="container d-flex justify-content-center">
+        <ul class="nav secondary-nav">
+            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Send" asp-action="Index">Send</a></li>
+            <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Cheques" asp-action="Index">Request</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Secondary menu end -->
+<!-- Content
+============================================= -->
+<div id="content" class="py-4">
+    <div class="container">
+        <h2 class="font-weight-400 text-center mt-3">Send Money</h2>
+
+        <!--Lấy người nhận ở đây-->
+        <p class="text-4 text-center mb-4">We will send the Cheque for you with Address: <span class="font-weight-500">ViewBag.AddressUser</span></p>
+        <p class="text-4 text-center mb-4">Back If Something wrong</p>
+        <div class="row">
+            <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
+                <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
+
+                    <!-- Send Money Confirm
+                    ============================================= -->
+                    <form id="form-send-money" asp-area="UserSection" asp-controller="Cheques" asp-action="ChequesSuccess" method="post">
+                        <div class="form-group">
+                            <p class="text-4 text-center mb-4">We have send a Code to your Email - @_context.Users.Where(use => use.Id == Context.Session.GetInt32("IdCurrentUser")).FirstOrDefault().Email, please Enter the code to continue</p>
+                            <label>Code</label>
+                            <input type="text" class="form-control" required placeholder="Enter The Code" name="OTP">
+                        </div>
+
+                        <h3 class="text-5 font-weight-400 mb-3">Details</h3>
+                        <pca></pca>
+
+                        <!--Thêm người gửi ở đây-->
+                        <p class="mb-1">You Are Making Request From<span class="text-3 float-right">@ViewBag.AccountFrom</span></p>
+                        <!--Thêm số tiền ở đây-->
+                        <p class="font-weight-500">Amount <span class="text-3 float-right">@ViewBag.Amount @ViewBag.SenderCurrency</span></p>
+                        <p class="mb-1">Balance After Request <span class="text-3 float-right">@ViewBag.NewBalance</span></p>
+                        <hr>
+
+                        <!--Thêm input để đẩy lên DB-->
+                        <input type="hidden" name="AccountFrom" value="@ViewBag.AccountFrom" />
+                        <input type="hidden" name="Amount" value="@ViewBag.Amount" />
+                        <input type="hidden" name="SenderCurrency" value="@ViewBag.SenderCurrency" />
+                        <!--Thêm hết vào đm-->
+                        
+                        <button class="btn btn-primary btn-block" type="submit">Confirm</button>
+                    </form>
+
+                    <!-- Send Money Confirm end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content end --> 
