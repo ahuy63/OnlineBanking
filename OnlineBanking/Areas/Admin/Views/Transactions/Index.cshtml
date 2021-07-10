@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OnlineBanking.Models.User>
+﻿@model IEnumerable<OnlineBanking.Models.Transaction>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,11 +6,9 @@
 
 <main class="page-content">
     <div class="container">
-
         <div class="page-header">
-            <h1 class="page-header__title">Customers <span class="text-grey">(@Model.Count())</span></h1>
+            <h1 class="page-header__title">Transactions</h1>
         </div>
-
         <div class="page-tools">
             <div class="page-tools__breadcrumbs">
                 <div class="breadcrumbs">
@@ -35,14 +33,14 @@
                                 </a>
                             </li>
                             <li class="breadcrumbs__item active">
-                                <span class="breadcrumbs__link">Users</span>
+                                <span class="breadcrumbs__link">Transactions</span>
                             </li>
                         </ol>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
         <div class="toolbox">
             <div class="toolbox__row row gutter-bottom-xs">
                 <div class="toolbox__left col-12 col-lg">
@@ -61,20 +59,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group form-group--inline col-12 col-sm-auto d-none d-sm-block">
-                            <div class="toolbox__status input-group input-group--white input-group--append">
-                                <input class="input input--select" type="text" value="All status" data-toggle="dropdown" readonly><span class="input-group__arrow">
-                                    <svg class="icon-icon-keyboard-down">
-                                        <use xlink:href="#icon-keyboard-down"></use>
-                                    </svg>
-                                </span>
-                                <div class="dropdown-menu dropdown-menu--right dropdown-menu--fluid js-dropdown-select">
-                                    <a class="dropdown-menu__item active" href="#" tabindex="0" data-value="All status"><span class="marker-item"></span> All status</a>
-                                    <a class="dropdown-menu__item" href="#" tabindex="0" data-value="Active"><span class="marker-item color-green"></span> Active</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="toolbox__right col-12 col-lg-auto">
@@ -87,7 +71,7 @@
                                             <use xlink:href="#icon-search"></use>
                                         </svg>
                                     </div>
-                                    <input class="input" type="text" placeholder="Search Customer">
+                                    <input class="input" type="text" placeholder="Search orders">
                                 </div>
                             </form>
                         </div>
@@ -95,14 +79,13 @@
                 </div>
             </div>
         </div>
-
-
         <div class="table-wrapper">
             <div class="table-wrapper__content table-collapse scrollbar-thin scrollbar-visible" data-simplebar>
-                <table class="table table--spaces">
+                <table class="table table--lines">
                     <colgroup>
-                        <col width="70px">
-                        <col>
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="50px">
                         <col>
                         <col>
                         <col>
@@ -111,16 +94,19 @@
                     <thead class="table__header">
                         <tr class="table__header-row">
                             <th class="table__th-sort">
-                                <span class="align-middle">User Name</span><span class="sort sort--down"></span>
+                                <span class="align-middle">From Account</span><span class="sort sort--down"></span>
                             </th>
                             <th class="table__th-sort">
-                                <span class="align-middle">Full Name</span><span class="sort sort--down"></span>
+                                <span class="align-middle">To Account</span><span class="sort sort--down"></span>
                             </th>
                             <th class="table__th-sort">
-                                <span class="align-middle">Bank Accounts</span><span class="sort sort--down"></span>
+                                <span class="align-middle">Amount</span><span class="sort sort--down"></span>
                             </th>
                             <th class="table__th-sort">
-                                <span class="align-middle">Registered</span><span class="sort sort--down"></span>
+                                <span class="align-middle">Description</span><span class="sort sort--down"></span>
+                            </th>
+                            <th class="table__th-sort">
+                                <span class="align-middle">Date</span><span class="sort sort--down"></span>
                             </th>
                             <th class="table__th-sort d-none d-sm-table-cell">
                                 <span class="align-middle">Status</span><span class="sort sort--down"></span>
@@ -130,82 +116,37 @@
                     </thead>
                     <tbody>
                         @{
-                            string statusclass = "", status = "";
                             foreach (var item in Model)
                             {
-                                if (item.Status == true ? true : false)
-                                {
-                                    statusclass = "color-green";
-                                    status = "Active";
-                                }
-                                else
-                                {
-                                    statusclass = "color-red";
-                                    status = "Deactivated";
-                                }
                                 <tr class="table__row">
+                                    <td class="d-none d-lg-table-cell table__td">
+                                        <span>@item.FromAccount.Number</span>
+                                    </td>
+                                    <td class="table__td">@item.ToAccount.Number</td>
                                     <td class="table__td">
-                                        <div class="media-item media-item--medium">
-                                            <a class="media-item__icon color-red" asp-controller="Users" asp-action="Details" asp-route-id="@item.Id">
-                                                <div class="media-item__icon-text">FB</div>
-                                                <img class="media-item__thumb" src="@Url.Content("~/img/content/humans/item-1.jpg")" alt="#">
-                                            </a>
-                                            <div class="media-item__right">
-                                                <h5 class="media-item__title"><a asp-controller="Users" asp-action="Details" asp-route-id="@item.Id">@item.Username</a></h5><a class="text-sm text-grey" href="mailto:#">@item.Email</a>
-                                            </div>
-                                        </div>
+                                        <span>$@item.Amount</span>
                                     </td>
-                                    <td class="table__td text-light-theme">@item.FullName</td>
-                                    <td class="table__td text-dark-theme">@ViewBag.</td>
-                                    <td class="table__td text-light-theme">@item.DateCreate</td>
-                                    <td class="table__td d-none d-sm-table-cell">
-                                        <div class="table__status"><span class="table__status-icon @statusclass"></span> @status</div>
+                                    <td class="table__td">
+                                        <span class="text-grey">@item.Description</span>
                                     </td>
-                                    <td class="table__td table__actions">
-                                        <div class="items-more">
-                                            <button class="items-more__button">
-                                                <svg class="icon-icon-more">
-                                                    <use xlink:href="#icon-more"></use>
+                                    <td class="table__td text-nowrap"><span class="text-grey">@item.IssuedDate.ToShortDateString()</span> @item.IssuedDate.ToString("hh:mm")</td>
+                                    <td class="d-none d-sm-table-cell table__td">
+                                        <div class="table__status"><span class="table__status-icon color-green"></span> Complete</div>
+                                    </td>
+                                    <td class="table__td table__actions text-dark-theme">
+                                        <a class="dropdown-items__link" asp-controller="Transactions" asp-action="Details" asp-route-id="@item.Id">
+                                            <span class="dropdown-items__link-icon">
+                                                <svg class="icon-icon-view">
+                                                    <use xlink:href="#icon-view"></use>
                                                 </svg>
-                                            </button>
-                                            <div class="dropdown-items dropdown-items--right">
-                                                <div class="dropdown-items__container">
-                                                    <ul class="dropdown-items__list">
-                                                        <li class="dropdown-items__item">
-                                                            <a class="dropdown-items__link" asp-controller="Users" asp-action="Details" asp-route-id="@item.Id">
-                                                                <span class="dropdown-items__link-icon">
-                                                                    <svg class="icon-icon-view">
-                                                                        <use xlink:href="#icon-view"></use>
-                                                                    </svg>
-                                                                </span>Details
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-items__item">
-                                                            <a class="dropdown-items__link" Onclick="ActivateConfirmed(@item.Id)">
-                                                                <span class="dropdown-items__link-icon">
-                                                                    <i class="fa fa-unlock" aria-hidden="true"></i>
-                                                                </span>Active
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-items__item">
-                                                            <a class="dropdown-items__link" Onclick="DeactivateConfirmed(@item.Id)">
-                                                                <span class="dropdown-items__link-icon">
-                                                                    <i class="fa fa-lock" aria-hidden="true"></i>
-                                                                </span>Deactive
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
+                                            </span>
+                                        </a>
                                     </td>
-                                </tr>
-
-                                <tr class="table__space">
-                                    <td colspan="7"></td>
                                 </tr>
                             }
                         }
+
+
 
 
                     </tbody>
@@ -254,19 +195,4 @@
     </div>
 </main>
 
-<script type="text/javascript">
-    function DeactivateConfirmed(id) {
-            if (confirm("Confirm Deactivate?")) {
-                window.location.href = '@Url.Action("DeactivateConfirmed", new {Id = "id" })'.replace("id",id);
-            }
-            else return false;
-    }
-    function ActivateConfirmed(id) {
 
-            if (confirm("Confirm Activate?")) {
-                window.location.href = '@Url.Action("ActivateConfirmed", new {Id = "id" })'.replace("id",id);
-            }
-            else return false;
-        }
-
-</script>

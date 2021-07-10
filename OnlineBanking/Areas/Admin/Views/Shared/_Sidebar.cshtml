@@ -13,7 +13,7 @@
             <nav class="sidebar__nav">
                 <ul class="sidebar__menu">
                     <li class="sidebar__menu-item">
-                        <a class="sidebar__link" href="index.html" aria-expanded="false">
+                        <a class="sidebar__link" asp-controller="Home" asp-action="Index" aria-expanded="false">
                             <span class="sidebar__link-icon">
                                 <svg class="icon-icon-dashboard">
                                     <use xlink:href="#icon-dashboard"></use>
@@ -22,7 +22,7 @@
                         </a>
                     </li>
                     <li class="sidebar__menu-item">
-                        <a class="sidebar__link" href="products.html" data-toggle="collapse" data-target="#Manage" aria-expanded="false">
+                        <a class="sidebar__link"  data-toggle="collapse" data-target="#Manage" aria-expanded="false">
                             <span class="sidebar__link-icon">
                                 <svg class="icon-icon-folder">
                                     <use xlink:href="#icon-folder"></use>
@@ -37,10 +37,10 @@
                         <div class="collapse" id="Manage">
                             <ul class="sidebar__collapse-menu">
                                 <li class="sidebar__menu-item">
-                                    <a class="sidebar__link" href="customers.html"><span class="sidebar__link-icon"><svg class="icon-icon-user"><use xlink:href="#icon-user"></use></svg></span></span><span class="sidebar__link-text">Customers</span></a>
+                                    <a class="sidebar__link" asp-controller="Users" asp-action="Index"><span class="sidebar__link-icon"><svg class="icon-icon-user"><use xlink:href="#icon-user"></use></svg></span></span><span class="sidebar__link-text">Customers</span></a>
                                 </li>
                                 <li class="sidebar__menu-item">
-                                    <a class="sidebar__link" href="customer-account.html"><span class="sidebar__link-icon"><svg class="icon-icon-contacts"><use xlink:href="#icon-contacts"></use></svg></span></span><span class="sidebar__link-text">Account</span></a>
+                                    <a class="sidebar__link" asp-controller="Transactions" asp-action="Index"><span class="sidebar__link-icon"><svg class="icon-icon-contacts"><use xlink:href="#icon-contacts"></use></svg></span></span><span class="sidebar__link-text">Transactions</span></a>
                                 </li>
                             </ul>
                         </div>

@@ -1,0 +1,71 @@
+﻿@model OnlineBanking.Models.Transaction
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Transaction</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="FromAccountId" class="control-label"></label>
+                <select asp-for="FromAccountId" class="form-control" asp-items="ViewBag.FromAccountId"></select>
+                <span asp-validation-for="FromAccountId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToAccountId" class="control-label"></label>
+                <select asp-for="ToAccountId" class="form-control" asp-items="ViewBag.ToAccountId"></select>
+                <span asp-validation-for="ToAccountId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrencyId" class="control-label"></label>
+                <select asp-for="CurrencyId" class="form-control" asp-items="ViewBag.CurrencyId"></select>
+                <span asp-validation-for="CurrencyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewBalanceSender" class="control-label"></label>
+                <input asp-for="NewBalanceSender" class="form-control" />
+                <span asp-validation-for="NewBalanceSender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewBalanceRecipient" class="control-label"></label>
+                <input asp-for="NewBalanceRecipient" class="form-control" />
+                <span asp-validation-for="NewBalanceRecipient" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IssuedDate" class="control-label"></label>
+                <input asp-for="IssuedDate" class="form-control" />
+                <span asp-validation-for="IssuedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

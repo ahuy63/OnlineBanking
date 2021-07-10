@@ -1,0 +1,239 @@
+﻿@model OnlineBanking.Models.Transaction
+
+@{
+    ViewData["Title"] = "Details";
+    double FromAccBalance = Model.NewBalanceSender + Model.Amount;
+    double ToAccBalance = Model.NewBalanceRecipient - Model.Amount;
+}
+
+<main class="page-content page-content--order-header">
+    <div class="container">
+        <div class="page-header">
+            @*<h3 class="page-header__subtitle d-lg-none">Order Details</h3>*@
+            <h1 class="page-header__title">Transaction Detail <span class="text-grey">#@Model.Id</span></h1>
+        </div>
+        <div class="page-tools">
+            <div class="page-tools__breadcrumbs">
+                <div class="breadcrumbs">
+                    <div class="breadcrumbs__container">
+                        <ol class="breadcrumbs__list">
+                            <li class="breadcrumbs__item">
+                                <a class="breadcrumbs__link" href="index.html">
+                                    <svg class="icon-icon-home breadcrumbs__icon">
+                                        <use xlink:href="#icon-home"></use>
+                                    </svg>
+                                    <svg class="icon-icon-keyboard-right breadcrumbs__arrow">
+                                        <use xlink:href="#icon-keyboard-right"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="breadcrumbs__item disabled">
+                                <a class="breadcrumbs__link" href="#">
+                                    <span>Manage</span>
+                                    <svg class="icon-icon-keyboard-right breadcrumbs__arrow">
+                                        <use xlink:href="#icon-keyboard-right"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="breadcrumbs__item disabled">
+                                <a class="breadcrumbs__link" href="#">
+                                    <span>Transactions</span>
+                                    <svg class="icon-icon-keyboard-right breadcrumbs__arrow">
+                                        <use xlink:href="#icon-keyboard-right"></use>
+                                    </svg>
+                                </a>
+                            </li>
+                            <li class="breadcrumbs__item active">
+                                <span class="breadcrumbs__link">Details</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-order">
+            <div class="card__wrapper">
+                <section class="card-order__section pt-0">
+                    <div class="card__container">
+                        <div class="card__header">
+                            <div class="row gutter-bottom-xs justify-content-between flex-grow-1">
+                                <div class="col">
+                                    <h3 class="card__title">From Account</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="card__date">Issued on @Model.IssuedDate.ToShortDateString() @Model.IssuedDate.ToString("hh:mm")</span>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="card-order__customer-list">
+                            <li class="card-order__customer-item">
+                                <svg class="icon-icon-user">
+                                    <use xlink:href="#icon-user"></use>
+                                </svg> <b>Name:</b>  <span>@Model.FromAccount.User.FullName</span>
+                            </li>
+                            <li class="card-order__customer-item">
+                                <svg class="icon-icon-phone">
+                                    <use xlink:href="#icon-phone"></use>
+                                </svg> <b>Phone:</b>  <a href="tel:@Model.FromAccount.User.NumberPhone">@Model.FromAccount.User.NumberPhone</a>
+                            </li>
+                            <li class="card-order__customer-item">
+                                <svg class="icon-icon-email">
+                                    <use xlink:href="#icon-email"></use>
+                                </svg> <b>Email:</b>  <a href="mailto:@Model.FromAccount.User.Email">@Model.FromAccount.User.Email</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="card-order__section card-order__method">
+                    <div class="card__container">
+                        <div class="row gutter-bottom-sm">
+                            <div class="col">
+                                <h3 class="card__title">From Account</h3>
+                                <div class="card-order__payment">
+                                    <div class="form-group">
+                                        <div class="input-group input-group--append">
+                                            <select class="input js-input-select input--fluid" data-placeholder="">
+                                                <option value="1" selected="selected">
+                                                    @Model.FromAccount.Number
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <ul class="card-order__list">
+                                        <li><b>Balance:</b> $@FromAccBalance</li>
+                                        <li><b>Account Type:</b> @Model.FromAccount.AccountType.Name</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="card__title">Amount</h3>
+                                <div class="card-order__shipping">
+                                    <div class="form-group">
+                                        <div class="input-group input-group--append">
+                                            <select class="input js-input-select input--fluid" data-placeholder="">
+                                                <option>
+                                                    $@Model.Amount
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <ul class="card-order__list">
+                                        <li><b>New Balance:</b> $@Model.NewBalanceSender</li>
+                                        <li><b>Date:</b> @Model.IssuedDate.ToShortDateString()</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-10 col-md-8 col-xl card-order__method-status">
+                                <div class="card-order__status-panel">
+                                    <h3 class="card__title">Description</h3>
+                                    <div class="card-order__shipping">
+                                        <div class="form-group">
+                                            <div class="input-group input-group--append">
+                                                <span class="text-grey"> @Model.Description</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <hr>
+        <div class="card card-order">
+            <div class="card__wrapper">
+                <section class="card-order__section pt-0">
+                    <div class="card__container">
+                        <div class="card__header">
+                            <div class="row gutter-bottom-xs justify-content-between flex-grow-1">
+                                <div class="col">
+                                    <h3 class="card__title">To Account</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="card-order__customer-list">
+                            <li class="card-order__customer-item">
+                                <svg class="icon-icon-user">
+                                    <use xlink:href="#icon-user"></use>
+                                </svg> <b>Name:</b>  <span>@Model.ToAccount.User.FullName</span>
+                            </li>
+                            <li class="card-order__customer-item">
+                                <svg class="icon-icon-phone">
+                                    <use xlink:href="#icon-phone"></use>
+                                </svg> <b>Phone:</b>  <a href="tel:@Model.ToAccount.User.NumberPhone">@Model.ToAccount.User.NumberPhone</a>
+                            </li>
+                            <li class="card-order__customer-item">
+                                <svg class="icon-icon-email">
+                                    <use xlink:href="#icon-email"></use>
+                                </svg> <b>Email:</b>  <a href="mailto:@Model.ToAccount.User.Email">@Model.ToAccount.User.Email</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="card-order__section card-order__method">
+                    <div class="card__container">
+                        <div class="row gutter-bottom-sm">
+                            <div class="col">
+                                <h3 class="card__title">To Account</h3>
+                                <div class="card-order__payment">
+                                    <div class="form-group">
+                                        <div class="input-group input-group--append">
+                                            <select class="input js-input-select input--fluid" data-placeholder="">
+                                                <option value="1" selected="selected">
+                                                    @Model.ToAccount.Number
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <ul class="card-order__list">
+                                        <li><b>Balance:</b> $@ToAccBalance</li>
+                                        <li><b>Account Type:</b> @Model.ToAccount.AccountType.Name</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h3 class="card__title">Amount</h3>
+                                <div class="card-order__shipping">
+                                    <div class="form-group">
+                                        <div class="input-group input-group--append">
+                                            <select class="input js-input-select input--fluid" data-placeholder="">
+                                                <option>
+                                                    $@Model.Amount
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <ul class="card-order__list">
+                                        <li><b>New Balance:</b> $@Model.NewBalanceRecipient</li>
+                                        <li><b>Date:</b> @Model.IssuedDate.ToShortDateString()</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-10 col-md-8 col-xl card-order__method-status">
+                                <div class="card-order__status-panel">
+                                    <div class="form-group form-group--inline">
+                                        <label class="form-label">Status</label>
+                                        <div class="input-group input-group--white input-group--append">
+                                            <select class="input js-input-select input--fluid" data-placeholder="">
+                                                <option value="1" selected="selected">
+                                                    Received
+                                                </option>
+                                            </select><span class="input-group__arrow">
+                                                <svg class="icon-icon-keyboard-down">
+                                                    <use xlink:href="#icon-keyboard-down"></use>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>
