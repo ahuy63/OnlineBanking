@@ -73,7 +73,6 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View();
         }
 
-
         [HttpPost]
         public ActionResult SendConfirm(string SenderCurrency, double AmountSend, string AccountGet, string AccountFrom)
         {
@@ -181,17 +180,17 @@ namespace OnlineBanking.Areas.UserSection.Controllers
 
             return View();
         }
-
+        
         [HttpPost]
         public ActionResult SendSuccess(string AccountFrom, string AccountTo, double Amount, string Currency, string Description, bool IsWantToSave, int OTP)
         {
-            if(OTP != HttpContext.Session.GetInt32("OTPSendMoney"))
+            if(OTP == HttpContext.Session.GetInt32("OTPSendMoney"))
             {
                 //Sai mã OTP, trả về Sendindex lại
                 TempData["ErrorOTP"] = "You have input wrong OTP Code, please repeat the process";
                 return RedirectToAction("Index", "Send");
             }
-
+            
             if (HttpContext.Session.GetInt32("PrepareToSend") == 1)
             {
                 //Nếu user muốn thêm người gửi thì add vào cho nó, không nó lại dỗi

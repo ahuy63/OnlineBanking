@@ -38,22 +38,44 @@ namespace OnlineBanking.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(string username, string password)
         {
+            if(HttpContext.Session.GetInt32("LoginFailTimes") > 2)
+            {
+                ViewBag.MessLogin = "You have Login Fail 3 Times Or More, please try again in few years";
+                return View();
+            }
+
             bool resultLogin = _context.Users.Any(us => us.Username == username && us.Password == password);
             if (resultLogin)
             {
+                //Xóa biến đếm sai đi
+                if(HttpContext.Session.GetInt32("LoginFailTimes") != null)
+                {
+                    HttpContext.Session.Remove("LoginFailTimes");
+                }
+
 
                 //Sử dụng một biến session để lưu Id người dùng hiện tại, đăng xuất thì mới xóa đi
                 HttpContext.Session.SetInt32("IdCurrentUser", _context.Users.Where(us => us.Username == username).FirstOrDefault().Id);
 
                 //Lưu lại tên người dùng để đưa ra Layout View
                 HttpContext.Session.SetString("NameCurrentUser", _context.Users.Where(us => us.Username == username).FirstOrDefault().FullName);
-                return RedirectToAction("Index", "Home", new {area = "UserSection"});
+                return RedirectToAction("Index", "Accounts", new {area = "UserSection"});
 
             }
 
+            //Cần đếm số lần xem người đó đã sai bao nhiêu lần
+            if (HttpContext.Session.GetInt32("LoginFailTimes") == null)
+            {
+                HttpContext.Session.SetInt32("LoginFailTimes", 1);
+            }
+            else
+            {
+                HttpContext.Session.SetInt32("LoginFailTimes", HttpContext.Session.GetInt32("LoginFailTimes").Value + 1);
+            }
 
             //Nếu không đăng nhập thành công, cài đặt một thông báo lỗi trả qua ViewBag
-            ViewBag.MessLogin = "!Login Fail, please check again";
+            ViewBag.MessLogin = "!Login Fail, you have Wrong for: " + HttpContext.Session.GetInt32("LoginFailTimes").Value.ToString() + " Times";
+
             return View();
         }
 

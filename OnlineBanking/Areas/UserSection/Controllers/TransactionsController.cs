@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,8 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         public async Task<IActionResult> Index()
         {
             var onlineBankingContext = _context.Transactions.Include(t => t.FromAccount).Include(t => t.ToAccount);
+            ViewBag.AllTransactionByUser = _context.Transactions.Include(tra=>tra.FromAccount.User).Include(tra=>tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra=>tra.Currency).Include(tra => tra.ToAccount).Where(tra => tra.FromAccount.UserId == HttpContext.Session.GetInt32("IdCurrentUser") || tra.ToAccount.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
+
             return View(await onlineBankingContext.ToListAsync());
         }
 
@@ -176,6 +179,38 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         private bool TransactionExists(int id)
         {
             return _context.Transactions.Any(e => e.Id == id);
+        }
+
+        //Index nhưng là nước uống, vì có lọc :))
+        [HttpPost]
+        [Route("PayyedDigibank/Transactions")]
+        public IActionResult Index(DateTime BeginDay, DateTime EndDay, string Filter)
+        {
+            //Xử lý lại ngày kết thúc
+            DateTime def = new DateTime();
+            if (DateTime.Compare(EndDay, def) == 0)
+            {
+                EndDay = DateTime.Now;
+            }
+            int IdCurrentUser = (int)HttpContext.Session.GetInt32("IdCurrentUser");
+            if(Filter == "All")
+            {
+                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.FromAccount.UserId == IdCurrentUser || tra.ToAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay);
+                return View();
+            }
+            if(Filter == "OnlySender")
+            {
+                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.FromAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay);
+                return View();
+            }
+            if(Filter == "OnlyRecipient")
+            {
+                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.ToAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay);
+                return View();
+            }
+
+            var onlineBankingContext = _context.Transactions.Include(t => t.FromAccount).Include(t => t.ToAccount);
+            return View(onlineBankingContext.ToList());
         }
     }
 }

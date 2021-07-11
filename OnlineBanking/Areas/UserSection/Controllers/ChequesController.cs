@@ -22,8 +22,42 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             _context = context;
         }
 
+
+        [Route("PayyedDigibank/Index")]
+        public IActionResult Index()
+        {
+            ViewBag.AllChequeByUser = _context.Cheques.Include(che=>che.Accounts.User).Include(che=>che.Accounts).Include(che=>che.currency).Where(che => che.Accounts.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
+            return View();
+        }
+
+        //Index cheque nhưng là nước uống, vì có lọc ......
+        [HttpPost]
+        [Route("PayyedDigibank/Index")]
+        public IActionResult Index(DateTime BeginDay, DateTime EndDay)
+        {
+            //Xử lý lại ngày kết thúc
+            DateTime def = new DateTime();
+            if (DateTime.Compare(EndDay, def) == 0)
+            {
+                EndDay = DateTime.Now;
+            }
+
+            List<Cheque> cheques = _context.Cheques.Include(che => che.Accounts.User).Include(che => che.Accounts).Include(che => che.currency).Where(che => che.Accounts.UserId == HttpContext.Session.GetInt32("IdCurrentUser") && che.DateCreate >= BeginDay && che.DateCreate <= EndDay).ToList();
+
+            if (cheques.Count() >0) {
+                ViewBag.AllChequeByUser = cheques;
+            }
+            else
+            {
+                ViewBag.AllChequeByUser = null;
+            }
+            return View();
+        }
+
+
+
         [Route("PayyedDigibank/Request")]
-        public ActionResult Index()
+        public ActionResult Making()
         {
             if (HttpContext.Session.GetInt32("IdCurrentUser") == null)
             {
@@ -34,7 +68,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             {
                 return RedirectToAction("Index", "Accounts");
             }
-
+            ViewBag.ErrorOTP = TempData["ErrorOTP"];
             ViewBag.ErrorBalance = TempData["ErrorBalance"];
 
             //Lấy tất cả Account của người đó
@@ -208,15 +242,49 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             ViewBag.Amount = Amount;
             ViewBag.SenderCurrency = SenderCurrency;
             ViewBag.AddressUser = AddressUser;
-            ViewBag.NewBalance = newBalance;
-            
+            ViewBag.NewBalance = Math.Round(newBalance,2);
 
             return View();
         }
 
+
+
+
+
         [HttpPost]
-        public IActionResult ChequeSuccess()
+        public IActionResult ChequeSuccess(string AccountFrom, double Amount, string SenderCurrency, string AddressUser, int OTP)
         {
+            if(OTP != HttpContext.Session.GetInt32("OTPSendMoney"))
+            {
+                TempData["ErrorOTP"] = "You have input wrong OTP, please repeat proccess";
+                return RedirectToAction("Making", "Cheques");
+            }
+
+            //Đã đúng OTP rồi thì lưu vào db
+            Cheque cheque = new Cheque();
+            cheque.AccountId = _context.Accounts.Where(acc =>acc.Number == AccountFrom).FirstOrDefault().Id;
+            cheque.DateCreate = DateTime.Now;
+            cheque.Amount = Amount;
+            cheque.CurrencyId = _context.Currencies.Where(cur => cur.Name == SenderCurrency).FirstOrDefault().Id;
+            cheque.Address = AddressUser;
+            cheque.ProccessingStatus = false;
+            cheque.Status = true;
+
+            _context.Cheques.Add(cheque);
+            //Thêm xong rồi thì trừ đi số tiền hiện có
+            Account tempAccount = _context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault();
+            double newBalance = tempAccount.Balance - Amount / (_context.Currencies.Where(curr => curr.Name == SenderCurrency).FirstOrDefault().ExchangeRate);
+            _context.Accounts.Update(tempAccount);
+
+
+            _context.SaveChanges();
+
+            //Lấy dữ liệu đưa qua view cho đẹp
+            ViewBag.Amount = Amount;
+            ViewBag.Currency = SenderCurrency;
+            ViewBag.AccountFrom = AccountFrom;
+            ViewBag.AddressUser = AddressUser;
+
             return View();
         }
     }

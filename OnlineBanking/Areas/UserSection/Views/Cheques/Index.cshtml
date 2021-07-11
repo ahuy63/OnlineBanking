@@ -1,116 +1,185 @@
-﻿@model OnlineBanking.Models.Transaction
+﻿@model IEnumerable<OnlineBanking.Models.Transaction>
 
 @{
-    ViewData["Title"] = "Send/Request";
+    ViewData["Title"] = "Cheques";
     var _context = ViewBag.Context as OnlineBankingContext;
-}
+    int count = 0;
 }
 
-<!-- Secondary menu
-  ============================================= -->
-<div class="bg-primary">
-    <div class="container d-flex justify-content-center">
-        <ul class="nav secondary-nav">
-            <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Send" asp-action="Index">Send</a></li>
-            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Cheques" asp-action="Index">Request</a></li>
-        </ul>
-    </div>
-</div>
-<!-- Secondary menu end -->
 <!-- Content
   ============================================= -->
 <div id="content" class="py-4">
     <div class="container">
-        <h2 class="font-weight-400 text-center mt-3">Request Money</h2>
-        <p class="text-4 text-center mb-4">Request your payment on anytime, anywhere in the world.</p>
         <div class="row">
-            <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
-                <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
-                    <h3 class="text-5 font-weight-400 mb-3">Payer Details</h3>
-                    <!-- Request Money Form
-                    ============================================= -->
-                    <form id="form-send-money" method="post" asp-action="ChequeConfirm" asp-controller="Cheques">
-                        <div class="form-group">
-                            <label for="payerName">Choose Account To Make Cheque</label>
-                            <div class="input-group-append">
-                                <span class="input-group-text p-0">
-                                    <select id="SenderAccountList" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="changeSenderAccount()">
-                                        <optgroup label="All Your Account">
-                                            @foreach (Account acc in ViewBag.AccountList)
-                                            {
-                                                <option value="@acc.Number">@acc.Number -- @acc.AccountType.Name</option>
-                                            }
-                                        </optgroup>
-                                    </select>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="emailID">Your Email</label>
-                            <input type="text" value="@ViewBag.CurrentUser.Email" class="form-control"  readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputCountry">Address To Recieve</label>
-                            <input class="form-control" type="text" name="AddressUser" value="@ViewBag.CurrentUser.Address" />
-                        </div>
-                        <div class="form-group">
-                            <p class="text-warning">@ViewBag.ErrorBalance</p>
-                            <label for="amount">Amount</label>
-                            <div class="input-group">
-                                <input name="Amount" type="text" class="form-control" data-bv-field="amount" id="amount" value="1000" placeholder="">
-                                <div class="input-group-append">
-                                    <span class="input-group-text p-0">
-                                        <select id="youSendCurrency" data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" class="selectpicker form-control bg-transparent" onchange="changeSenderCurrency()">
-                                            <optgroup label="All Currency">
-                                                @foreach (Currency currency in _context.Currencies.ToList())
-                                                {
-                                                    //Chuyển dổi chữ hoa thành chữ thường để hiện thị icon currency trong bootstrap
-                                                    char[] arr;
-                                                    arr = currency.Name.ToCharArray();//Chuyển thành mảng ký tự
 
-                                                    for (int i = 0; i < 3; i++)
-                                                    {
-                                                        arr[i] = Char.ToLower(arr[i]);
-                                                    }
-                                                    String strTemp = new String(arr);
-                                                    //Hoàn tất chuyển đổi
+            <partial name="_AsideLeft" />
 
-                                                    <!--Hiển thị-->
-                                                    <option data-icon="currency-flag currency-flag-@strTemp mr-1" value="@currency.ExchangeRate.ToString()">@currency.Name</option>
-                                                }
-                                            </optgroup>
-                                        </select>
-                                    </span>
+            <!-- Middle Panel
+            ============================================= -->
+            <div class="col-lg-9">
+
+                <h2 class="font-weight-400 mb-3">Cheques</h2>
+
+                <!-- Filter
+                ============================================= -->
+                <div class="row">
+                    <div class="col mb-2">
+                        <form id="filterTransactions" asp-controller="Cheques" asp-action="Index" method="post">
+                            <div class="form-row">
+                                <!-- Date Range
+                                ========================= -->
+                                <div class="col-sm-6 col-md-5 form-group">
+                                    <label>Begin</label>
+                                    <input class="form-control" type="date" name="BeginDay" value="@DateTime.MinValue" />
+                                    <label>End</label>
+                                    <input class="form-control" type="date" name="EndDay" value="@DateTime.Now" /><br />
+                                </div>
+                                <!-- Statements Link
+                                ========================= -->
+                                <div class="col-auto d-flex align-items-center ml-auto form-group">
+                                    <div class="dropdown">
+                                        <a class="text-muted btn-link" href="#" role="button" id="statements" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-download text-3 mr-1"></i>Statements</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="statements"> <a class="dropdown-item" href="#">CSV</a> <a class="dropdown-item" href="#">PDF</a> </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!--Các input ẩn-->
-                        <input id="SenderCurrency" type="hidden" name="SenderCurrency" value="USD" />
-                            <!--xét giá trị mặc định cho tài khoản rút tiền vì có thể phát sinh lỗi-->
-                        <input id="SenderAccount" type="hidden" name="AccountFrom" value="@_context.Accounts.Where(acc=>acc.UserId == Context.Session.GetInt32("IdCurrentUser")).FirstOrDefault().Number" />
-                        <hr/>
-
-                        <button class="btn btn-primary btn-block mt-4" type="submit">Continue</button>
-                    </form>
-                    <!-- Request Money Form end -->
+                            <button type="submit" class="btn-group-toggle">Statistics</button>
+                        </form>
+                    </div>
                 </div>
+                <!-- Filter End -->
+                <!-- All Transactions
+                ============================================= -->
+                @if (ViewBag.AllChequeByUser != null)
+                {
+                    <div class="bg-light shadow-sm rounded py-4 mb-4">
+                        <h3 class="text-5 font-weight-400 d-flex align-items-center px-4 mb-3">All Your Cheques</h3>
+                        <!-- Title
+                        =============================== -->
+                        <div class="transaction-title py-2 px-4">
+                            <div class="row">
+                                <div class="col-2 col-sm-1 text-center"><span class="">Date</span></div>
+                                <div class="col col-sm-7">Status</div>
+                                <div class="col-auto col-sm-2 d-none d-sm-block text-center">Amount</div>
+                                @*<div class="col-3 col-sm-2 text-right">New Balance</div>*@
+                            </div>
+                        </div>
+                        <!-- Title End -->
+                        <!-- Transaction List
+                        =============================== -->
+                        <div class="transaction-list">
+                            <!--Vòng lặp ở đây-->
+                            @foreach (Cheque cheque in ViewBag.AllChequeByUser)
+                            {
+                                //Dùng 1 biến đếm để thêm vào id cho Cheque
+                                count++;
+                                <div class="transaction-item px-4 py-3" data-toggle="modal" data-target="#transaction-detail-@count">
+                                    <div class="row align-items-center flex-row">
+                                        <div class="col-2 col-sm-1 text-center"> <span class="d-block text-4 font-weight-100"><!--Chỗ này để ngày-->@cheque.DateCreate.ToString("MMMM dd")</span>  </div>
+
+                                        @{
+                                            if (cheque.ProccessingStatus)
+                                            {
+                                                <div class="col col-sm-7"> <span class="d-block text-4">Delivering</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col col-sm-7"> <span class="d-block text-4">Checking</div>
+                                            }
+                                            <div class="col-3 col-sm-2 text-right text-4"> <span class="text-nowrap">- @cheque.Amount</span> <span class="text-2 text-uppercase">@cheque.currency.Name</span> </div>
+                                            @*<div class="col-3 col-sm-2 text-right text-4"> <span class="text-nowrap">$@cheque.NewBalanceSender$</div>*@
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            <!--Kết thúc vòng lặp-->
+                            <!--Sửa lại biến count-->
+                            @{
+                                count = 0;
+                            }
+
+                        </div>
+                        <!-- Transaction List End -->
+                        <!-- Transaction Item Details Modal
+                        =========================================== -->
+                        <!--Vòng lặp ở đây-->
+                        @foreach (Cheque cheque in ViewBag.AllChequeByUser)
+                        {
+                            count++;
+                            <div id="transaction-detail-@count" class="modal fade" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered transaction-details" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div class="row no-gutters">
+                                                <!-- Cái màu xanh bên trái-->
+                                                <div class="col-sm-5 d-flex justify-content-center bg-primary rounded-left py-4">
+                                                    <div class="my-auto text-center">
+                                                        <div class="text-17 text-white my-3"><i class="fas fa-building"></i></div>
+                                                        <h3 class="text-4 text-white font-weight-400 my-3">Your Request Cheque</h3>
+                                                        <div class="text-8 font-weight-500 text-white my-4">@cheque.Amount @cheque.currency.Name</div>
+                                                        <p class="text-white"><!--Ngày tháng ở đây-->@cheque.DateCreate.ToString("dddd, dd MMMM yyyy")</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-7">
+                                                    <h5 class="text-5 font-weight-400 m-3">
+                                                        Cheque Details
+                                                        <button type="button" class="close font-weight-400" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                                    </h5>
+                                                    <hr>
+
+                                                    <div class="px-3">
+                                                        <p class="d-flex align-items-center font-weight-500 mb-4">Total Amount <span class="text-3 ml-auto">- @cheque.Amount @cheque.currency.Name</span></p>
+
+                                                        <ul class="list-unstyled">
+                                                            <li class="font-weight-500">You Have Send To Address:</li>
+                                                            <li class="text-muted">@cheque.Address</li>
+                                                        </ul>
+                                                        <ul class="list-unstyled">
+                                                            <li class="font-weight-500">From Account</li>
+                                                            <li class="text-muted">@cheque.Accounts.Number</li>
+                                                        </ul>
+                                                        <ul class="list-unstyled">
+                                                            <li class="font-weight-500">Status:</li>
+                                                            @if (cheque.ProccessingStatus)
+                                                            {
+                                                                <li class="text-muted">Delivering</li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li class="text-muted">Checking</li>
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <!--Kết thúc vòng lặp-->
+                        <!-- Transaction Item Details Modal End -->
+                        <!-- Pagination
+                        ============================================= -->
+                        @*<ul class="pagination justify-content-center mt-4 mb-0">
+                                <li class="page-item disabled"> <a class="page-link" href="#" tabindex="-1"><i class="fas fa-angle-left"></i></a> </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2 <span class="sr-only">(current)</span></a> </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item d-flex align-content-center flex-wrap text-muted text-5 mx-1">......</li>
+                                <li class="page-item"><a class="page-link" href="#">15</a></li>
+                                <li class="page-item"> <a class="page-link" href="#"><i class="fas fa-angle-right"></i></a> </li>
+                            </ul>*@
+                        <!-- Paginations end -->
+
+                    </div>
+                }
+                <!-- All Transactions End -->
             </div>
+            <!-- Middle End -->
         </div>
     </div>
 </div>
-<!-- Content end --> 
-<script>
-    function changeSenderCurrency() {
-        var selSender = document.getElementById("youSendCurrency");
-        document.getElementById("SenderCurrency").value = selSender.options[selSender.selectedIndex].text;
-    }
-
-    function changeSenderAccount() {
-        var selSender = document.getElementById("SenderAccountList");
-        document.getElementById("SenderAccount").value = selSender.value;
-    }
-
-
-</script>
-
-
+<!-- Content end -->

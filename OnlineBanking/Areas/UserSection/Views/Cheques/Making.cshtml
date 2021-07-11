@@ -1,0 +1,116 @@
+﻿@model OnlineBanking.Models.Transaction
+
+@{
+    ViewData["Title"] = "Send/Request";
+    var _context = ViewBag.Context as OnlineBankingContext;
+}
+}
+
+<!-- Secondary menu
+  ============================================= -->
+<div class="bg-primary">
+    <div class="container d-flex justify-content-center">
+        <ul class="nav secondary-nav">
+            <li class="nav-item"> <a class="nav-link" asp-area="UserSection" asp-controller="Send" asp-action="Index">Send</a></li>
+            <li class="nav-item"> <a class="nav-link active" asp-area="UserSection" asp-controller="Cheques" asp-action="Making">Request</a></li>
+        </ul>
+    </div>
+</div>
+<!-- Secondary menu end -->
+<!-- Content
+  ============================================= -->
+<div id="content" class="py-4">
+    <div class="container">
+        <h2 class="font-weight-400 text-center mt-3">Request Money</h2>
+        <p class="text-4 text-center mb-4">Request your payment on anytime, anywhere in the world.</p>
+        <div class="row">
+            <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
+                <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
+                    <h3 class="text-5 font-weight-400 mb-3">Payer Details</h3>
+                    <!-- Request Money Form
+                    ============================================= -->
+                    <form id="form-send-money" method="post" asp-action="ChequeConfirm" asp-controller="Cheques">
+                        <div class="form-group">
+                            <label for="payerName">Choose Account To Make Cheque</label>
+                            <div class="input-group-append">
+                                <span class="input-group-text p-0">
+                                    <select id="SenderAccountList" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="changeSenderAccount()">
+                                        <optgroup label="All Your Account">
+                                            @foreach (Account acc in ViewBag.AccountList)
+                                            {
+                                                <option value="@acc.Number">@acc.Number -- @acc.AccountType.Name</option>
+                                            }
+                                        </optgroup>
+                                    </select>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailID">Your Email</label>
+                            <input type="text" value="@ViewBag.CurrentUser.Email" class="form-control"  readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCountry">Address To Recieve</label>
+                            <input class="form-control" type="text" name="AddressUser" value="@ViewBag.CurrentUser.Address" />
+                        </div>
+                        <div class="form-group">
+                            <p class="text-warning">@ViewBag.ErrorBalance</p>
+                            <label for="amount">Amount</label>
+                            <div class="input-group">
+                                <input name="Amount" type="text" class="form-control" data-bv-field="amount" id="amount" value="1000" placeholder="">
+                                <div class="input-group-append">
+                                    <span class="input-group-text p-0">
+                                        <select id="youSendCurrency" data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" class="selectpicker form-control bg-transparent" onchange="changeSenderCurrency()">
+                                            <optgroup label="All Currency">
+                                                @foreach (Currency currency in _context.Currencies.ToList())
+                                                {
+                                                    //Chuyển dổi chữ hoa thành chữ thường để hiện thị icon currency trong bootstrap
+                                                    char[] arr;
+                                                    arr = currency.Name.ToCharArray();//Chuyển thành mảng ký tự
+
+                                                    for (int i = 0; i < 3; i++)
+                                                    {
+                                                        arr[i] = Char.ToLower(arr[i]);
+                                                    }
+                                                    String strTemp = new String(arr);
+                                                    //Hoàn tất chuyển đổi
+
+                                                    <!--Hiển thị-->
+                                                    <option data-icon="currency-flag currency-flag-@strTemp mr-1" value="@currency.ExchangeRate.ToString()">@currency.Name</option>
+                                                }
+                                            </optgroup>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Các input ẩn-->
+                        <input id="SenderCurrency" type="hidden" name="SenderCurrency" value="USD" />
+                            <!--xét giá trị mặc định cho tài khoản rút tiền vì có thể phát sinh lỗi-->
+                        <input id="SenderAccount" type="hidden" name="AccountFrom" value="@_context.Accounts.Where(acc=>acc.UserId == Context.Session.GetInt32("IdCurrentUser")).FirstOrDefault().Number" />
+                        <hr/>
+
+                        <button class="btn btn-primary btn-block mt-4" type="submit">Continue</button>
+                    </form>
+                    <!-- Request Money Form end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content end --> 
+<script>
+    function changeSenderCurrency() {
+        var selSender = document.getElementById("youSendCurrency");
+        document.getElementById("SenderCurrency").value = selSender.options[selSender.selectedIndex].text;
+    }
+
+    function changeSenderAccount() {
+        var selSender = document.getElementById("SenderAccountList");
+        document.getElementById("SenderAccount").value = selSender.value;
+    }
+
+
+</script>
+
+

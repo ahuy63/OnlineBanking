@@ -5,13 +5,9 @@
     var _context = ViewBag.Context as OnlineBankingContext;
 }
 
-
 @{
-
     //Lấy ra tất cả thông báo
-    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).ToList();
-
-
+    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Take(5).ToList();
 }
 
 
@@ -36,10 +32,10 @@
                 <nav class="primary-menu navbar navbar-expand-lg">
                     <div id="header-nav" class="collapse navbar-collapse">
                         <ul class="navbar-nav mr-auto">
-                            <li class="@(ViewBag.Title == "Dashboard" ? "active" : "")"><a asp-area="UserSection" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                            <li class="@(ViewBag.Title == "Account" ? "active" : "")"><a asp-area="UserSection" asp-controller="Accounts" asp-action="Index">Accounts</a></li>
                             <li class="@(ViewBag.Title == "Transaction" ? "active" : "")"><a asp-area="UserSection" asp-controller="Transactions" asp-action="Index">Transactions</a></li>
+                            <li class="@(ViewBag.Title == "Cheque" ? "active" : "")"><a asp-area="UserSection" asp-controller="Cheques" asp-action="Index">Cheques</a></li>
                             <li class="@(ViewBag.Title == "Send/Request" ? "active" : "")"><a asp-area="UserSection" asp-controller="Send" asp-action="Index">Send/Request</a></li>
-                            <li class="@(ViewBag.Title == "Help" ? "active" : "")"><a asp-area="UserSection" asp-controller="Home" asp-action="Index">Help</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -50,12 +46,10 @@
                 ============================== -->
                 <nav class="login-signup navbar navbar-expand">
                     <ul class="navbar-nav">
-
-
                         <!--Cái chuông noti ở đây-->
                         <li>
                             <div class="dropdown" style="float: right; padding: 20px">
-                                <a href="#" onclick="setAllNotiBeHaveRead()" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
+                                <a href="#" onclick="return setAllNotiBeHaveRead()" role="button" data-toggle="dropdown" id="dropdownMenu1" data-target="#" style="float: left" aria-expanded="true">
                                     <i class="fa fa-bell" style="font-size: 25px; float: left; color: black">
                                     </i>
                                 </a>
@@ -103,7 +97,7 @@
                         </li>
                         <!--Kêt thúc chuông-->
 
-                        <li><a asp-area="UserSection" asp-controller="Users" asp-action="Index">Settings</a> </li>
+                        @*<li><a asp-area="UserSection" asp-controller="Users" asp-action="Index">Settings</a> </li>*@
                         <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-outline-primary shadow-none d-none d-sm-block" asp-area="" asp-controller="Users" asp-action="SignOut">Sign out</a></li>
                     </ul>
                 </nav>
@@ -113,6 +107,13 @@
     </div>
 </header>
 <!-- Header End -->
+
+
+
+
+
+
+
 
 <script type="text/javascript">
     function setAllNotiBeHaveRead() {
@@ -125,8 +126,6 @@
         document.getElementById("CountNotification").innerHTML = "";
         return false;
     }
-
-
 </script>
 
 
