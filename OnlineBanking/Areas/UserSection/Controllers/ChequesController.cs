@@ -287,5 +287,18 @@ namespace OnlineBanking.Areas.UserSection.Controllers
 
             return View();
         }
+
+
+        [HttpPost]
+        public IActionResult UpdateAddress(int ChequeId, string NewAddress)
+        {
+            //Xử lý update
+            Cheque cheque = _context.Cheques.Where(che => che.Id == ChequeId).FirstOrDefault();
+            cheque.Address = NewAddress;
+            _context.Cheques.Update(cheque);
+            _context.SaveChanges();
+            
+            return RedirectToAction("Index");
+        }
     }
 }
