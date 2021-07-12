@@ -131,7 +131,13 @@
                                                         <p class="d-flex align-items-center font-weight-500 mb-4">Total Amount <span class="text-3 ml-auto">- @cheque.Amount @cheque.currency.Name</span></p>
 
                                                         <ul class="list-unstyled">
-                                                            <li class="font-weight-500 mb-3">You Have Send To Address:  <a href="#edit-Address-@count" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit Address</a></li>
+                                                            <li class="font-weight-500 mb-3">
+                                                                You Have Send To Address:
+                                                                @if (!cheque.ProccessingStatus)
+                                                                {
+                                                                    <a href="#edit-Address-@cheque.Id" data-toggle="modal" class="float-right text-1 text-uppercase text-muted btn-link"><i class="fas fa-edit mr-1"></i>Edit Address</a>
+                                                                }
+                                                            </li>
                                                             <li class="text-muted">@cheque.Address</li>
                                                         </ul>
                                                         <ul class="list-unstyled">
@@ -167,9 +173,9 @@
 
                         <!--Tạo thêm một cái model nhỏ để sửa địa chỉ-->
                         @foreach (Cheque cheque in ViewBag.AllChequeByUser)
-                            {
-                                count++;
-                            <div id="edit-Address-@count" class="modal fade " role="dialog" aria-hidden="true">
+                        {
+                            count++;
+                            <div id="edit-Address-@cheque.Id" class="modal fade " role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
