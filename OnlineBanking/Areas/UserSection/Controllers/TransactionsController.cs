@@ -37,6 +37,48 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             ViewData["ToAccountId"] = new SelectList(_context.Accounts, "Id", "Number");
             return View();
         }
+        public IActionResult Deposit()
+        {
+            // truyên addressbook vao view
+            ViewData["AccountList"] = new SelectList(_context.Accounts.Where(acc => acc.UserId == HttpContext.Session.GetInt32("IdCurrentUser")), "Id", "Number");
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DepositConfirm(int depositAmount, int AccountList)
+        {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            ViewData["Amount"] = depositAmount;
+            ViewData["Account"] = _context.Accounts.Where(a => a.Id == AccountList).Include(a => a.User).FirstOrDefault();
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> DepositSuccess(int Amount, int ToAccount, int Balance)
+        {
+            ViewData["Amount"] = Amount;
+            var account = new Account() { Id = ToAccount, Balance = Balance };
+            account.Balance += Amount;
+            _context.Accounts.Attach(account);
+            _context.Entry(account).Property(x => x.Balance).IsModified = true;
+            await _context.SaveChangesAsync();
+
+            Notification noti = new Notification();
+            noti.UserId = HttpContext.Session.GetInt32("IdCurrentUser");
+            noti.Message = "Deposit";
+            noti.CreateDate = DateTime.Now;
+            _context.Notifications.Add(noti);
+            await _context.SaveChangesAsync();
+
+            return View();
+        }
+        public IActionResult Withdraw()
+        {
+            // truyên addressbook vao view
+            ViewData["FromAccountId"] = new SelectList(_context.Accounts, "Id", "Number");
+            ViewData["ToAccountId"] = new SelectList(_context.Accounts, "Id", "Number");
+            return View();
+        }
 
         public IActionResult Request()
         {

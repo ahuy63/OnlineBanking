@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "Deposit";
+}
+
+<!-- Content
+ ============================================= -->
+<div id="content" class="py-4">
+    <div class="container">
+        <h2 class="font-weight-400 text-center mt-3 mb-4">Deposit Money</h2>
+        <div class="row">
+            <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
+                <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
+
+                    <!-- Deposit Money Form
+                    ============================================= -->
+                    <form id="form-send-money" asp-controller="Transactions" asp-action="DepositConfirm" method="post">
+                        <div class="form-group">
+                            <label for="youSend">Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend"> <span class="input-group-text">$</span> </div>
+                                <input name ="depositAmount" type="text" class="form-control" data-bv-field="youSend" id="youSend" value="1000" oninput="YouReceive()" placeholder="">
+                                <div class="input-group-append">
+                                    <span class="input-group-text p-0">
+                                        <select id="youSendCurrency" data-style="custom-select bg-transparent border-0" data-container="body" data-live-search="true" class="selectpicker form-control bg-transparent">
+                                                <option data-icon="currency-flag currency-flag-usd mr-1" data-subtext="United States dollar" selected="selected" value="">USD</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>To Account</label>
+                            <select name ="AccountList" id="cardType" class="custom-select" asp-items="ViewBag.AccountList" required="">
+                            </select>
+                        </div>
+                        <p class="text-muted mt-4">Transactions fees <span class="float-right d-flex align-items-center"><del>1.00 USD</del> <span class="bg-success text-1 text-white font-weight-500 rounded d-inline-block px-2 line-height-4 ml-2">Free</span></span></p>
+                        <hr>
+                        <p class="font-weight-500">You'll deposit <span id="depositAmount" class="text-3 float-right">$1,000.00 </span></p>
+                        <button class="btn btn-primary btn-block">Continue</button>
+                    </form>
+                    <!-- Deposit Money Form end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content end -->
+<script type="text/javascript">
+    function YouReceive() {
+        document.getElementById("depositAmount").innerHTML = "$" + document.getElementById("youSend").value;
+    }
+    
+</script>

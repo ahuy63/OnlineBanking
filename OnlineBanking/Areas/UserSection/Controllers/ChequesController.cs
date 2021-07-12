@@ -23,7 +23,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         }
 
 
-        [Route("PayyedDigibank/Index")]
+        [Route("PayyedDigibank/Cheques")]
         public IActionResult Index()
         {
             ViewBag.AllChequeByUser = _context.Cheques.Include(che=>che.Accounts.User).Include(che=>che.Accounts).Include(che=>che.currency).Where(che => che.Accounts.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
@@ -32,7 +32,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
 
         //Index cheque nhưng là nước uống, vì có lọc ......
         [HttpPost]
-        [Route("PayyedDigibank/Index")]
+        [Route("PayyedDigibank/Cheques")]
         public IActionResult Index(DateTime BeginDay, DateTime EndDay)
         {
             //Xử lý lại ngày kết thúc

@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "Deposit";
+    string cardnumber = @ViewBag.Account.Number;
+
+}
+
+<!-- Content
+  ============================================= -->
+<div id="content" class="py-4">
+    <div class="container">
+        <h2 class="font-weight-400 text-center mt-3 mb-4">Deposit Money</h2>
+        <div class="row">
+            <div class="col-md-8 col-lg-6 col-xl-5 mx-auto">
+                <div class="bg-light shadow-sm rounded p-3 p-sm-4 mb-4">
+                    <!-- Deposit Money Confirm
+                    ============================================= -->
+                    <form id="form-send-money" asp-controller="Transactions" asp-action="DepositSuccess" method="post">
+                        <div class="alert alert-info rounded shadow-sm py-3 px-4 px-sm-2 mb-4">
+                            <div class="row">
+                                <p class="col-sm-5 opacity-7 text-sm-right mb-0 mb-sm-3">Account Name:</p>
+                                <p class="col-sm-7">@ViewBag.Account.User.FullName</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-sm-5 opacity-7 text-sm-right mb-0 mb-sm-3">Account Number:</p>
+                                <p class="col-sm-7">XXXX-XXXX-XXXX-@cardnumber.Substring(cardnumber.Length - 4)</p>
+                            </div>
+                            <div class="row">
+                                <p class="col-sm-5 opacity-7 text-sm-right mb-0">Bank Name:</p>
+                                <p class="col-sm-7 mb-0">Payyed Bank</p>
+                            </div>
+                        </div>
+                        <h3 class="text-5 font-weight-400 mb-3">Details</h3>
+                        <p class="mb-1">Deposit Amount <span class="text-3 float-right">@ViewBag.Amount USD</span></p>
+                        <p class="mb-1">Fees <span class="text-3 float-right">0.00 USD</span></p>
+                        <hr>
+                        <p class="font-weight-500">Total<span class="text-3 float-right">@ViewBag.Amount USD</span></p>
+                        <input type="hidden" name="Amount" value="@ViewBag.Amount" />
+                        <input type="hidden" name="ToAccount" value="@ViewBag.Account.Id" />
+                        <input type="hidden" name="Balance" value="@ViewBag.Account.Balance" />
+                        <button class="btn btn-primary btn-block">Confirm</button>
+                    </form>
+                    <!-- Deposit Money Confirm end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content end -->
