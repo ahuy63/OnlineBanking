@@ -226,7 +226,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         //Index nhưng là nước uống, vì có lọc :))
         [HttpPost]
         [Route("PayyedDigibank/Transactions")]
-        public IActionResult Index(DateTime BeginDay, DateTime EndDay, string Filter)
+        public IActionResult Index(DateTime BeginDay, DateTime EndDay, string Filter, int NumberOf)
         {
             //Xử lý lại ngày kết thúc
             DateTime def = new DateTime();
@@ -235,19 +235,26 @@ namespace OnlineBanking.Areas.UserSection.Controllers
                 EndDay = DateTime.Now;
             }
             int IdCurrentUser = (int)HttpContext.Session.GetInt32("IdCurrentUser");
+            //Xử lý lại số transaction gần nhất người dùng muốn thấy
+            if (NumberOf == 0)
+            {
+                NumberOf = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Where(tra => tra.FromAccount.UserId == IdCurrentUser || tra.ToAccount.UserId == IdCurrentUser).Count();
+            }
+
+            
             if(Filter == "All")
             {
-                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.FromAccount.UserId == IdCurrentUser || tra.ToAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay);
+                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.FromAccount.UserId == IdCurrentUser || tra.ToAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay).OrderBy(tra=>tra.IssuedDate).Take(NumberOf);
                 return View();
             }
             if(Filter == "OnlySender")
             {
-                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.FromAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay);
+                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.FromAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay).OrderBy(tra => tra.IssuedDate).Take(NumberOf);
                 return View();
             }
             if(Filter == "OnlyRecipient")
             {
-                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.ToAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay);
+                ViewBag.AllTransactionByUser = _context.Transactions.Include(tra => tra.FromAccount.User).Include(tra => tra.ToAccount.User).Include(tra => tra.FromAccount).Include(tra => tra.Currency).Include(tra => tra.ToAccount).Where(tra => (tra.ToAccount.UserId == IdCurrentUser) && tra.IssuedDate >= BeginDay && tra.IssuedDate <= EndDay).OrderBy(tra => tra.IssuedDate).Take(NumberOf);
                 return View();
             }
 
