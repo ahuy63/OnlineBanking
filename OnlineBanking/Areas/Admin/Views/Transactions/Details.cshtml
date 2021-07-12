@@ -58,7 +58,7 @@
                         <div class="card__header">
                             <div class="row gutter-bottom-xs justify-content-between flex-grow-1">
                                 <div class="col">
-                                    <h3 class="card__title">From Account</h3>
+                                    <h3 class="card__title">From @Model.FromAccount.User.Username</h3>
                                 </div>
                                 <div class="col-auto">
                                     <span class="card__date">Issued on @Model.IssuedDate.ToShortDateString() @Model.IssuedDate.ToString("hh:mm")</span>
@@ -150,7 +150,7 @@
                         <div class="card__header">
                             <div class="row gutter-bottom-xs justify-content-between flex-grow-1">
                                 <div class="col">
-                                    <h3 class="card__title">To Account</h3>
+                                    <h3 class="card__title">To @Model.ToAccount.User.Username</h3>
                                 </div>
                             </div>
                         </div>

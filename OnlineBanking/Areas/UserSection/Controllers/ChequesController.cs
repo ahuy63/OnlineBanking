@@ -227,7 +227,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             }
 
             
-            //Cần phải validate bằng mail chứ ko thì mất tiền ăn l**
+            //Cần phải validate bằng mail chứ ko thì mất tiền
             //Tạo 1 mã ngẫu nhiên
             Random random = new Random();
             int OTPNumber = random.Next(10000, 999999);

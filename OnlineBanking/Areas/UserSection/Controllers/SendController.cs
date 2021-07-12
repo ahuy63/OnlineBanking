@@ -117,8 +117,8 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             //Kiểm tra và chửi nó
             if(_context.Accounts.Where(acc => acc.Number == AccountFrom).FirstOrDefault().Balance < AmountTemp)
             {
-                //Vì bên kia có 1 đống View bag thế là phải copy vào, nhìn rối vcl cơ mà chịu đó
-                //Truyền danh sách Tiền tệ qua bên kia để đổi tiền, nhìn cho đẹp, vcl!!!!!!!
+                //Vì bên kia có 1 đống View bag thế là phải copy vào
+                //Truyền danh sách Tiền tệ qua bên kia để đổi tiền
                 ViewBag.lstCurrencies = _context.Currencies.ToList();
 
                 //Lấy thông tin của User đem qua bên kia
@@ -167,7 +167,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             //Kiểm tra xem người nhận đó có trong addressbook của người gửi chưa
             ViewBag.IsNewAddressBook = !_context.AddressBooks.Any(add => add.AccountId == _context.Accounts.Where(acc => acc.Number == AccountGet).FirstOrDefault().Id && add.UserId == HttpContext.Session.GetInt32("IdCurrentUser"));
 
-            //Cần phải validate bằng mail chứ ko thì mất tiền ăn l**
+            //Cần phải validate bằng mail chứ ko thì mất tiền
             //Tạo 1 mã ngẫu nhiên
             Random random = new Random();
             int OTPNumber = random.Next(10000, 999999);
@@ -184,7 +184,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
         [HttpPost]
         public ActionResult SendSuccess(string AccountFrom, string AccountTo, double Amount, string Currency, string Description, bool IsWantToSave, int OTP)
         {
-            if(OTP == HttpContext.Session.GetInt32("OTPSendMoney"))
+            if(OTP != HttpContext.Session.GetInt32("OTPSendMoney"))
             {
                 //Sai mã OTP, trả về Sendindex lại
                 TempData["ErrorOTP"] = "You have input wrong OTP Code, please repeat the process";
