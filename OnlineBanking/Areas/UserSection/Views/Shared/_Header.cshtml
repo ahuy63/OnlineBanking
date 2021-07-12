@@ -7,7 +7,7 @@
 
 @{
     //Lấy ra tất cả thông báo
-    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Take(5).ToList();
+    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).OrderByDescending(noti => noti.CreateDate).Take(5).ToList();
 }
 
 
@@ -71,7 +71,7 @@
                                                     <li>
                                                         <p>
                                                             You have Sent To @noti.Transaction.ToAccount.User.FullName With Amount @noti.Transaction.Amount @noti.Transaction.Currency.Name<br /><br />
-                                                            Your Current Balacnce Is @noti.Transaction.NewBalanceSender USD
+                                                            Your Current Balance Is @noti.Transaction.NewBalanceSender USD
                                                             <span class="timeline-date">Date: @noti.Transaction.IssuedDate</span>
                                                         </p>
                                                     </li>
@@ -81,7 +81,7 @@
                                                     <li>
                                                         <p>
                                                             You Have Received @noti.Transaction.Amount @noti.Transaction.Currency.Name From @noti.Transaction.FromAccount.Number - @noti.Transaction.FromAccount.User.FullName<br /><br />
-                                                            Your Current Balacnce Is: @noti.Transaction.NewBalanceRecipient USD
+                                                            Your Current Balance Is: @noti.Transaction.NewBalanceRecipient USD
                                                             <span class="timeline-date">Date: @noti.Transaction.IssuedDate</span>
                                                         </p>
                                                     </li>
