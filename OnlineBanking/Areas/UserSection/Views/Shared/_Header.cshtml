@@ -9,6 +9,7 @@
     //Lấy ra tất cả thông báo
     //List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Take(3).ToList();
     List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).OrderByDescending(noti => noti.CreateDate).Take(5).ToList();
+    User user = _context.Users.Where(u => u.Id == Context.Session.GetInt32("IdCurrentUser")).FirstOrDefault();
 }
 
 
@@ -97,8 +98,12 @@
                             </div>
                         </li>
                         <!--Kêt thúc chuông-->
-
-                        @*<li><a asp-area="UserSection" asp-controller="Users" asp-action="Index">Settings</a> </li>*@
+                        @{
+                            if (user.IsAdmin)
+                            {
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Admin panel</a> </li>
+                            }
+                        }
                         <li class="align-items-center h-auto ml-sm-3"><a class="btn btn-outline-primary shadow-none d-none d-sm-block" asp-area="" asp-controller="Users" asp-action="SignOut">Sign out</a></li>
                     </ul>
                 </nav>
