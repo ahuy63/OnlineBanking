@@ -35,26 +35,25 @@
                     <div class="row">
                         <!-- chỗ này cần kiểm tra xem người dùng họ đã có tài khoản nào chưa-->
                         @{
-                            string divclass = "", status = "", iconclass = "", cardnumber = "", style = "";
-
-                            foreach (var item in ViewBag.AccountList)
-                            {
-                                if (item.Status)
+                                string divclass = "", status = "", iconclass = "", cardnumber = "", style = "";
+                                foreach (var item in ViewBag.AccountList)
                                 {
-                                    divclass = "account-card-primary";
-                                    status = "Approved";
-                                    iconclass = "fa-check-circle";
-                                    style = "";
-                                }
-                                else
-                                {
-                                    divclass = "account-card-expire";
-                                    status = "Declined";
-                                    iconclass = "fa-times-circle";
-                                    style = "color: red";
-                                }
-                                cardnumber = item.Number;
-                                <div class="col-12 col-sm-6">
+                                    if (item.Status)
+                                    {
+                                        divclass = "account-card-primary";
+                                        status = "Approved";
+                                        iconclass = "fa-check-circle";
+                                        style = "";
+                                    }
+                                    else
+                                    {
+                                        divclass = "account-card-expire";
+                                        status = "Declined";
+                                        iconclass = "fa-times-circle";
+                                        style = "color: red";
+                                    }
+                                    cardnumber = item.Number;
+                                <div class="col-12 col-sm-6 mt-2">
                                     <div class="account-card @divclass text-white rounded mb-4 mb-lg-0">
                                         <div class="row no-gutters">
                                             <div class="col-3 d-flex justify-content-center p-3">
@@ -72,7 +71,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete</a> </div>
+                                        <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a asp-controller="Transactions" asp-action="Deposit" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete</a> </div>
                                     </div>
                                 </div>
                                 <!-- Edit Bank Account Details Modal
@@ -126,7 +125,7 @@
                         }
 
 
-                        <div class="col-12 col-sm-6">
+                        <div class="col-12 col-sm-6 mt-2">
                             <a href="" data-target="#add-new-bank-account" data-toggle="modal" class="account-card-new d-flex align-items-center rounded h-100 p-3 mb-4 mb-lg-0">
                                 <p class="w-100 text-center line-height-4 m-0"> <span class="text-3"><i class="fas fa-plus-circle"></i></span> <span class="d-block text-body text-3">Add New Bank Account</span> </p>
                             </a>

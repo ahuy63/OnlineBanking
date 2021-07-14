@@ -19,7 +19,7 @@
             </div>
         </div>
         <p class="text-3 font-weight-500 mb-2">Hello, @_context.Users.Where(us => us.Id == Context.Session.GetInt32("IdCurrentUser")).FirstOrDefault().FullName</p>
-        <p class="mb-2"><a href="profile.html" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
+        <p class="mb-2"><a asp-controller="Users" asp-action="Index" class="text-5 text-light" data-toggle="tooltip" title="Edit Profile"><i class="fas fa-edit"></i></a></p>
     </div>
     <!-- Profile Details End -->
     <!-- Available Balance

@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="toolbox__right col-12 col-lg-auto">
+                <@*div class="toolbox__right col-12 col-lg-auto">
                     <div class="toolbox__right-row row row--xs flex-nowrap">
                         <div class="col col-lg-auto">
                             <form class="toolbox__search" method="GET">
@@ -92,7 +92,7 @@
                             </form>
                         </div>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
 
@@ -115,9 +115,6 @@
                             </th>
                             <th class="table__th-sort">
                                 <span class="align-middle">Full Name</span><span class="sort sort--down"></span>
-                            </th>
-                            <th class="table__th-sort">
-                                <span class="align-middle">Bank Accounts</span><span class="sort sort--down"></span>
                             </th>
                             <th class="table__th-sort">
                                 <span class="align-middle">Registered</span><span class="sort sort--down"></span>
@@ -156,7 +153,6 @@
                                         </div>
                                     </td>
                                     <td class="table__td text-light-theme">@item.FullName</td>
-                                    <td class="table__td text-dark-theme">@ViewBag.</td>
                                     <td class="table__td text-light-theme">@item.DateCreate</td>
                                     <td class="table__td d-none d-sm-table-cell">
                                         <div class="table__status"><span class="table__status-icon @statusclass"></span> @status</div>
