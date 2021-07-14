@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,20 @@ namespace OnlineBanking.Areas.Admin.Controllers
         // GET: Admin/Transactions
         public async Task<IActionResult> Index()
         {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            if (HttpContext.Session.GetString("NameCurrentUser") == null)
+            {
+                return RedirectToAction("Login", "Users");
+
+            }
+            var user = await _context.Users
+            .FirstOrDefaultAsync(m => m.Id == id);
+            if (!user.IsAdmin)
+            {
+                TempData["MessLogin"] = "Login with administrator privileges and try again";
+                return RedirectToAction("Login", "Users");
+            }
+
             var onlineBankingContext = _context.Transactions.Include(t => t.Currency).Include(t => t.FromAccount).Include(t => t.ToAccount);
 
             return View(await onlineBankingContext.ToListAsync());

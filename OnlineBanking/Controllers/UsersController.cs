@@ -38,9 +38,9 @@ namespace OnlineBanking.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(string username, string password)
         {
-            if(HttpContext.Session.GetInt32("LoginFailTimes") > 2)
+            if(HttpContext.Session.GetInt32("LoginFailTimes") == 1)
             {
-                ViewBag.MessLogin = "You have Login Fail 3 Times Or More, please try again in few years";
+                ViewBag.MessLogin = "Login Failed 3 Times, Your account is temporaly locked";
                 return View();
             }
 
@@ -66,15 +66,15 @@ namespace OnlineBanking.Controllers
             //Cần đếm số lần xem người đó đã sai bao nhiêu lần
             if (HttpContext.Session.GetInt32("LoginFailTimes") == null)
             {
-                HttpContext.Session.SetInt32("LoginFailTimes", 1);
+                HttpContext.Session.SetInt32("LoginFailTimes", 2);
             }
             else
             {
-                HttpContext.Session.SetInt32("LoginFailTimes", HttpContext.Session.GetInt32("LoginFailTimes").Value + 1);
+                HttpContext.Session.SetInt32("LoginFailTimes", HttpContext.Session.GetInt32("LoginFailTimes").Value - 1);
             }
 
             //Nếu không đăng nhập thành công, cài đặt một thông báo lỗi trả qua ViewBag
-            ViewBag.MessLogin = "!Login Fail, you have Wrong for: " + HttpContext.Session.GetInt32("LoginFailTimes").Value.ToString() + " Times";
+            ViewBag.MessLogin = "!Login Failed, " + HttpContext.Session.GetInt32("LoginFailTimes").Value.ToString() + " Tries remaining";
 
             return View();
         }

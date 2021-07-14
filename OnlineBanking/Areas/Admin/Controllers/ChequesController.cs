@@ -24,6 +24,19 @@ namespace OnlineBanking.Areas.Admin.Controllers
         // GET: Admin/Cheques
         public async Task<IActionResult> Index()
         {
+            int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            if (HttpContext.Session.GetString("NameCurrentUser") == null)
+            {
+                return RedirectToAction("Login", "Users");
+
+            }
+            var user = await _context.Users
+            .FirstOrDefaultAsync(m => m.Id == id);
+            if (!user.IsAdmin)
+            {
+                TempData["MessLogin"] = "Login with administrator privileges and try again";
+                return RedirectToAction("Login", "Users");
+            }
             var onlineBankingContext = _context.Cheques.Include(c => c.Accounts).Include(c => c.currency);
             return View(await onlineBankingContext.ToListAsync());
         }

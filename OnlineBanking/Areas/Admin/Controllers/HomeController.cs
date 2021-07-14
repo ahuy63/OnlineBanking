@@ -28,18 +28,24 @@ namespace OnlineBanking.Areas.Admin.Controllers
             _context = context;
         }
 
-        [Route("Admin/Dashboard")]
+        [Route("Admin")]
         //public IActionResult Index()
         public async Task<IActionResult> Index()
         {
             int id = Convert.ToInt32(HttpContext.Session.GetInt32("IdCurrentUser"));
+            if (HttpContext.Session.GetString("NameCurrentUser") == null)
+            {
+                return RedirectToAction("Login", "Users");
+
+            }
             var user = await _context.Users
             .FirstOrDefaultAsync(m => m.Id == id);
-            //if (user.IsAdmin)
-            //{   
-            //    return RedirectToAction("Login", "Users");
-            //}
-            //ViewBag.Current = "Dashboard";
+            if (!user.IsAdmin)
+            {
+                TempData["MessLogin"] = "Login with administrator privileges and try again";
+                return RedirectToAction("Login", "Users");
+            }
+            ViewBag.Current = "Dashboard";
 
             return View(user);
         }
