@@ -7,7 +7,7 @@
 
 @{
     //Lấy ra tất cả thông báo
-    List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Take(3).ToList();
+    //List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).Take(3).ToList();
     List<Notification> allNoti = _context.Notifications.Include(noti => noti.User).Include(noti => noti.Transaction).Include(noti => noti.Transaction.ToAccount).Include(noti =>noti.Transaction.FromAccount).Include(noti => noti.Transaction.FromAccount.User).Include(noti => noti.Transaction.ToAccount.User).Include(noti => noti.Transaction.Currency).Where(noti => noti.UserId == Context.Session.GetInt32("IdCurrentUser")).OrderByDescending(noti => noti.CreateDate).Take(5).ToList();
 }
 

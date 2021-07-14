@@ -223,7 +223,7 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             if(newBalance <= 0)
             {
                 TempData["ErrorBalance"] = "Your Balance is not Enough For This Request, please Try Again!!!!";
-                return RedirectToAction("Index","Cheques");
+                return RedirectToAction("Making","Cheques");
             }
 
             

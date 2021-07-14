@@ -34,7 +34,7 @@
                         <h4 class="text-warning">@ViewBag.ErrorOTP</h4>
                         <div class="form-group">
                             <lable>Choose Account To Send Money</label>
-                            <div class="input-group-append">
+                            
                                 <span class="input-group-text p-0">
                                     <select id="SenderAccountList" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="changeSenderAccount()">
                                         <optgroup label="All Your Account">
@@ -45,7 +45,7 @@
                                         </optgroup>
                                     </select>
                                 </span>
-                            </div>
+                           
                         </div>
 
 
@@ -54,22 +54,22 @@
                             <label>To Account</label>
                             <label class="text-danger">@ViewBag.ErrorRecipientAccount</label>
                             <input name="AccountGet" type="text" value="@ViewBag.AccountRecipientDefault" class="form-control" data-bv-field="emailid" id="RecipientNumber" required placeholder="Enter Recipient's Account Number"></input>
-
+                            <label>Address Book</label>
                             <!-- Chỗ này cần kiểm tra xem addrees book có tài khoản nào không-->
                             @if (ViewBag.CountAddressBook != 0)
                             {
-                                <div class="input-group-append">
-                                    <span class="input-group-text p-0">
-                                        <select id="AddressBook" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="fillRecipientNumber()">
-                                            <optgroup label="All Your Address Book">
-                                                @foreach (AddressBook address in ViewBag.AllAddressBookById)
-                                                {
-                                                    <option value="@address.Account.Number">@address.Account.Number -- @address.Account.User.FullName</option>
-                                                }
-                                            </optgroup>
-                                        </select>
-                                    </span>
-                                </div>
+                                @*<div class="input-group-append">*@
+                                <span class="input-group-text p-0">
+                                    <select id="AddressBook" data-style="custom-select bg-transparent border-0" data-container="body" class="selectpicker form-control bg-transparent" onchange="fillRecipientNumber()">
+                                        <optgroup label="Saved Payees">
+                                            @foreach (AddressBook address in ViewBag.AllAddressBookById)
+                                            {
+                                                <option value="@address.Account.Number">@address.Account.Number -- @address.Account.User.FullName</option>
+                                            }
+                                        </optgroup>
+                                    </select>
+                                </span>
+                                @* </div>*@
                                 <br />
                             }
                         </div>
