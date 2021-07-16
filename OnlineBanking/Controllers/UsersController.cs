@@ -40,7 +40,7 @@ namespace OnlineBanking.Controllers
         {
             if(HttpContext.Session.GetInt32("LoginFailTimes") == 1)
             {
-                ViewBag.MessLogin = "Login Failed 3 Times, Your account is temporaly locked";
+                ViewBag.MessLogin = "Login Failed 3 Times, You can Login again after 60 minutes";
                 return View();
             }
 
@@ -122,12 +122,12 @@ namespace OnlineBanking.Controllers
             //Gửi người dùng 1 cái mã xác minh rồi nhập vào
 
 
-            //Tạo 1 mã ngẫu nhiên
+            //Create Random OTP
             Random random = new Random();
             NumberCode = random.Next(10000, 999999);
             string message = "Your code is:" + NumberCode.ToString();
 
-            //Gửi Email, phương thức gửi email nằm trong class EmailUser
+            //Email User OTP
             EmailUser emailUser = new EmailUser(EmailAddress, "Validate", message);
             emailUser.SendEmail(emailUser);
 

@@ -129,13 +129,12 @@ namespace OnlineBanking.Areas.UserSection.Controllers
             return View(account);
         }
 
-        // POST: UserSection/Accounts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeactivateConfirmed(int id)
         {
             var account = await _context.Accounts.FindAsync(id);
-            _context.Accounts.Remove(account);
+            account.Status = false;
+            _context.Accounts.Attach(account);
+            _context.Entry(account).Property(x => x.Status).IsModified = true;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -71,7 +71,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a asp-controller="Transactions" asp-action="Deposit" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete</a> </div>
+                                        <div class="account-card-overlay rounded"> <a href="#" data-target="#modal-@item.Id" data-toggle="modal" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-share"></i></span>More Details</a> <a asp-controller="Transactions" asp-action="Deposit" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-money"></i></span>Deposit</a> <a href="#" onclick="DeactivateConfirmed(@item.Id)" class="text-light btn-link mx-2"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Deactivate</a> </div>
                                     </div>
                                 </div>
                                 <!-- Edit Bank Account Details Modal
@@ -113,7 +113,7 @@
                                                                 <li class="font-weight-500">Status:</li>
                                                                 <li class="text-muted">@status <span class="text-success text-3"><i class="fas @iconclass" style="@style"></i></span></li>
                                                             </ul>
-                                                            <p><a href="#" class="btn btn-sm btn-outline-danger btn-block shadow-none"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Delete Account</a></p>
+                                                            <p><a href="#" onclick="DeactivateConfirmed(@item.Id)" class="btn btn-sm btn-outline-danger btn-block shadow-none"><span class="mr-1"><i class="fas fa-minus-circle"></i></span>Deactivate Account</a></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -201,5 +201,11 @@
         document.getElementById('addbankaccount').onsubmit = function () {
             return true;
         }
+    }
+    function DeactivateConfirmed(id) {
+            if (confirm("Confirm Deactivate?")) {
+                window.location.href = '@Url.Action("DeactivateConfirmed", "Accounts", new {Id = "id" })'.replace("id",id);
+            }
+            else return false;
     }
 </script>
